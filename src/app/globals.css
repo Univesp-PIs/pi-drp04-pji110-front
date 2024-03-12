@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+ --white: #ffff;
+ --black: #000;
+ --primary: #f23456
+}
+
+
+body {
+  color: var(--white);
+  background:  var(--black);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+::selection {
+  background: var(--black);
+  text-shadow: none;
+  color: var(--white);
+}
