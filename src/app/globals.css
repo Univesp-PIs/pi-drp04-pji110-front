@@ -15,20 +15,20 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--white);
-  border-radius: 10px;
+  background: var(--primary);
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--black);
+  background: #fff;
 }
 
-/* ::selection {
-  background: var(--white);
+::selection {
+  background: var(--black);
   text-shadow: none;
-  color: var(--black);
-} */
+  color: var(--white);
+}
