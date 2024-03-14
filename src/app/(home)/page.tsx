@@ -1,13 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { toast } from 'react-toastify'
 
 export default function Home() {
-  function handleLogin() {
-    toast.error('Ainda não implementado :(')
-  }
-
   return (
     <main className="w-full">
       <div className="w-full flex justify-center py-16" id="quem-somos">
@@ -15,8 +10,7 @@ export default function Home() {
           <h2 className="text-xl font-bold">Bem-vindo ao Curriculum42</h2>
           <div className="w-full flex justify-end">
             <Link
-              href=""
-              onClick={handleLogin}
+              href="/login"
               className="border py-2 px-8 rounded-md hover:bg-white hover:text-black duration-300"
             >
               Login
