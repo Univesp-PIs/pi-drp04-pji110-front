@@ -1,15 +1,41 @@
+'use client'
+
 import { ButtonBack } from '@/components/Buttons/back'
+import { Collapse } from '@/components/Collapses/collapse'
 import Link from 'next/link'
-import { FaArrowDown } from 'react-icons/fa6'
 import { IoShareSocial } from 'react-icons/io5'
+
+import * as Avatar from '@radix-ui/react-avatar'
+import { formatRoute } from '@/utils/formatRoute'
+import { toast } from 'react-toastify'
+import { usePDF } from 'react-to-pdf'
+import { useState } from 'react'
 
 export default function CurriculumSlug({
   params,
 }: {
   params: { slug: string }
 }) {
+  const [isGenetatingPdf, setIsGenetatingPdf] = useState(false)
+  const { fullName, initials } = formatRoute(params.slug)
+  const { toPDF, targetRef } = usePDF({ filename: 'curriculum.pdf' })
+
+  async function handleGeneratePDF() {
+    await setIsGenetatingPdf(true)
+    try {
+      toPDF()
+      toast.success('PDF gerado com sucesso.')
+      setIsGenetatingPdf(false)
+    } catch (error) {
+      toast.error(`Erro ao gerar o PDF: ${error}`)
+      setIsGenetatingPdf(false)
+    }
+  }
   return (
-    <main className="w-full">
+    <main
+      className={`w-full ${isGenetatingPdf && 'text-black'}`}
+      ref={targetRef}
+    >
       <div className="w-full flex justify-center py-16" id="quem-somos">
         <div className="max-w-screen-md w-full flex flex-col gap-4 justify-center px-4 md:px-0">
           <div className="flex w-full justify-between">
@@ -18,27 +44,40 @@ export default function CurriculumSlug({
             </div>
             <div className="flex items-center gap-4">
               <span className="text-xl">ID</span>
-              <span className="rounded-md border text-center px-4 py-2 hover:bg-white hover:text-black duration-300">
+              <span
+                className={`rounded-md border ${isGenetatingPdf && 'border-black'} text-center px-4 py-2 hover:bg-white hover:text-black duration-300`}
+              >
                 Number
               </span>
             </div>
-            <div className="flex items-center justify-center border rounded-md px-4 py-2 gap-4 hover:bg-white hover:text-black duration-300">
+            <div
+              className={`flex items-center justify-center border ${isGenetatingPdf && 'border-black'} rounded-md px-4 py-2 gap-4 hover:bg-white hover:text-black duration-300`}
+            >
               <span>Key</span>
-              <IoShareSocial size={25} />
+              <IoShareSocial onClick={handleGeneratePDF} size={25} />
             </div>
           </div>
 
           <p>Dados Pessoais</p>
 
-          <div className="w-full flex p-4 justify-between text-center items-center border rounded-md">
+          <div
+            className={`w-full flex p-4 justify-between text-center items-center border ${isGenetatingPdf && 'border-black'} rounded-md`}
+          >
             <div className="w-5/12 h-full flex items-center justify-center">
-              <div className="flex items-center justify-center rounded-full border h-[200px] w-[200px] capitalize">
+              <Avatar.Root
+                className={`border ${isGenetatingPdf && 'border-black'} inline-flex h-[200px] w-[200px] select-none items-center justify-center overflow-hidden rounded-full align-middle`}
+              >
+                <Avatar.Fallback className="capitalize text-5xl flex h-full w-full items-center justify-center font-medium">
+                  {initials}
+                </Avatar.Fallback>
+              </Avatar.Root>
+              {/* <div className="flex items-center justify-center rounded-full border h-[200px] w-[200px] capitalize">
                 {params.slug}
-              </div>
+              </div> */}
             </div>
             <div className="flex flex-col gap-4 w-6/12">
               <div className="w-full text-center border rounded-md py-2">
-                Name
+                {fullName}
               </div>
               <div className="w-full text-center border rounded-md py-2">
                 Career
@@ -58,19 +97,21 @@ export default function CurriculumSlug({
             </div>
           </div>
           <p>Dados Profissionais</p>
-          <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
-            <div className="w-full flex justify-between px-4 text-center border rounded-md py-2">
-              Slot
-              <FaArrowDown size={25} />
-            </div>
-            <div className="w-full flex justify-between px-4 text-center border rounded-md py-2">
-              Slot
-              <FaArrowDown size={25} />
-            </div>
-            <div className="w-full flex justify-between px-4 text-center border rounded-md py-2">
-              Slot
-              <FaArrowDown size={25} />
-            </div>
+          <div
+            className={`${isGenetatingPdf && 'border-black'} border rounded-md w-full flex items-center flex-col gap-4 p-8`}
+          >
+            <Collapse
+              title="Slot"
+              content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit cupiditate beatae magni eaque fuga id ducimus adipisci ex. Dolorum iure quia iusto optio quam eligendi a dolores et magni impedit!"
+            />
+            <Collapse
+              title="Slot 2"
+              content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit cupiditate beatae magni eaque fuga id ducimus adipisci ex. Dolorum iure quia iusto optio quam eligendi a dolores et magni impedit!"
+            />
+            <Collapse
+              title="Slot 3"
+              content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit cupiditate beatae magni eaque fuga id ducimus adipisci ex. Dolorum iure quia iusto optio quam eligendi a dolores et magni impedit!"
+            />
           </div>
           <div className="w-full flex justify-between">
             <Link
