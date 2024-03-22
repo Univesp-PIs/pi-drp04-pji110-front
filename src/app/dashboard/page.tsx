@@ -1,6 +1,7 @@
 'use client'
 
 import { ButtonBack } from '@/components/Buttons/back'
+import { PopoverShare } from '@/components/Popover/share'
 import Link from 'next/link'
 import { FaChevronDown } from 'react-icons/fa6'
 
@@ -24,6 +25,13 @@ export default function Dashboard() {
 
           <div className="w-full text-center">
             <div className="w-full flex flex-col gap-4">
+              <div className="flex gap-4">
+                <div className="border rounded-md p-4 w-full text-center">
+                  Nenhum CV cadastrado
+                </div>
+
+                <PopoverShare />
+              </div>
               <div className="flex gap-4">
                 <div className="border rounded-md p-4 w-full text-center">
                   Nenhum CV cadastrado
