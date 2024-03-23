@@ -62,7 +62,7 @@ export function ModalRegister() {
     if (recaptchaValue === null) {
       toast.error('Preencha o re-captcha.', {
         className: 'bg-primary',
-        bodyClassName: 'text-black',
+        bodyClassName: 'text-primary',
         progressClassName: 'fancy-progress-bar',
       })
       setIsSubmitting(false)
@@ -83,17 +83,17 @@ export function ModalRegister() {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="border text-center py-2 px-8 md:w-1/3 font-medium rounded-md bg-white text-black hover:bg-black hover:text-white duration-300">
+        <button className="border text-center py-2 px-8 md:w-1/3 font-medium rounded-md bg-secondary text-primary hover:bg-primary hover:text-secondary duration-300">
           Cadastrar
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <Dialog.Content className="overflow-y-auto flex flex-col gap-4 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-4 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]">
-          <Dialog.Title className="text-black font-semibold text-xl">
+        <Dialog.Overlay className="bg-primaryA6 data-[state=open]:animate-overlayShow fixed inset-0" />
+        <Dialog.Content className="overflow-y-auto flex flex-col gap-4 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-secondary p-4 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]">
+          <Dialog.Title className="text-primary font-semibold text-xl">
             Criar conta
           </Dialog.Title>
-          <Dialog.Description className="text-black">
+          <Dialog.Description className="text-primary">
             Preencha seus dados para criar uma conta
           </Dialog.Description>
           <form
@@ -101,11 +101,11 @@ export function ModalRegister() {
             className="flex flex-col gap-2"
           >
             <fieldset className="flex flex-col w-full gap-2">
-              <label className="text-black" htmlFor="name">
+              <label className="text-primary" htmlFor="name">
                 Nome
               </label>
               <input
-                className="border border-black rounded-md p-3 w-full bg-transparent text-black"
+                className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
                 id="name"
                 {...register('name')}
                 placeholder="Digite seu nome"
@@ -117,11 +117,11 @@ export function ModalRegister() {
               )}
             </fieldset>
             <fieldset className="flex flex-col w-full gap-2">
-              <label className="text-black" htmlFor="email">
+              <label className="text-primary" htmlFor="email">
                 Email
               </label>
               <input
-                className="border border-black rounded-md p-3 w-full bg-transparent text-black"
+                className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
                 id="email"
                 {...register('email')}
                 type="email"
@@ -135,12 +135,12 @@ export function ModalRegister() {
             </fieldset>
             <div className="flex gap-4 flex-col md:flex-row">
               <fieldset className="flex flex-col w-full gap-2">
-                <label className="text-black" htmlFor="password">
+                <label className="text-primary" htmlFor="password">
                   Senha
                 </label>
                 <div className="relative">
                   <input
-                    className="border border-black rounded-md p-3 w-full bg-transparent text-black"
+                    className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     {...register('password')}
@@ -150,13 +150,13 @@ export function ModalRegister() {
                     <FaRegEyeSlash
                       size={20}
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute cursor-pointer right-4 bottom-[27%] text-black"
+                      className="absolute cursor-pointer right-4 bottom-[27%] text-primary"
                     />
                   ) : (
                     <FaRegEye
                       size={20}
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute cursor-pointer right-4 bottom-[27%] text-black"
+                      className="absolute cursor-pointer right-4 bottom-[27%] text-primary"
                     />
                   )}
                 </div>
@@ -167,12 +167,12 @@ export function ModalRegister() {
                 )}
               </fieldset>
               <fieldset className="flex flex-col w-full gap-2">
-                <label className="text-black" htmlFor="passwordConfirmation">
+                <label className="text-primary" htmlFor="passwordConfirmation">
                   Confirmar senha
                 </label>
                 <div className="relative">
                   <input
-                    className="border border-black rounded-md p-3 w-full bg-transparent text-black"
+                    className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
                     id="passwordConfirmation"
                     type={showPasswordConfirmation ? 'text' : 'password'}
                     {...register('passwordConfirmation')}
@@ -184,7 +184,7 @@ export function ModalRegister() {
                       onClick={() =>
                         setShowPasswordConfirmation(!showPasswordConfirmation)
                       }
-                      className="absolute cursor-pointer right-4 bottom-[27%] text-black"
+                      className="absolute cursor-pointer right-4 bottom-[27%] text-primary"
                     />
                   ) : (
                     <FaRegEye
@@ -192,7 +192,7 @@ export function ModalRegister() {
                       onClick={() =>
                         setShowPasswordConfirmation(!showPasswordConfirmation)
                       }
-                      className="absolute cursor-pointer right-4 bottom-[27%] text-black"
+                      className="absolute cursor-pointer right-4 bottom-[27%] text-primary"
                     />
                   )}
                 </div>
@@ -211,7 +211,7 @@ export function ModalRegister() {
                 onChange={handleRecaptchaChange}
               />
               {isSubmitting ? (
-                <div className="cursor-not-allowed flex justify-center border bg-black text-white text-center py-2 px-8 font-medium rounded-md hover:scale-95 duration-300">
+                <div className="cursor-not-allowed flex justify-center border bg-primary text-secondary text-center py-2 px-8 font-medium rounded-md hover:scale-95 duration-300">
                   <BiLoaderAlt
                     className="animate-spin cursor-not-allowed"
                     size={25}
@@ -220,7 +220,7 @@ export function ModalRegister() {
               ) : (
                 <button
                   type="submit"
-                  className="border bg-black text-white text-center py-2 px-8 font-medium rounded-md hover:scale-95 duration-300"
+                  className="border bg-primary text-secondary text-center py-2 px-8 font-medium rounded-md hover:scale-95 duration-300"
                 >
                   Cadastrar
                 </button>
@@ -229,7 +229,7 @@ export function ModalRegister() {
           </form>
           <Dialog.Close asChild>
             <button
-              className="text-black p-2 hover:bg-black hover:text-white focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none duration-100"
+              className="text-primary p-2 hover:bg-primary hover:text-secondary focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none duration-100"
               aria-label="Close"
             >
               <FaX size={20} />

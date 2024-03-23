@@ -49,7 +49,7 @@ export default function Login() {
     if (recaptchaValue === null) {
       toast.error('Preencha o re-captcha.', {
         className: 'bg-primary',
-        bodyClassName: 'text-black',
+        bodyClassName: 'text-primary',
         progressClassName: 'fancy-progress-bar',
       })
       setIsSubmitting(false)
@@ -77,7 +77,7 @@ export default function Login() {
           <div className="w-full flex justify-center md:justify-end">
             <Link
               href="/dashboard"
-              className="border py-2 px-8 rounded-md hover:bg-white hover:text-black duration-300"
+              className="border py-2 px-8 rounded-md hover:bg-secondary hover:text-primary duration-300"
             >
               Continuar sem cadastro
             </Link>
@@ -118,13 +118,13 @@ export default function Login() {
                   <FaRegEyeSlash
                     size={20}
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute cursor-pointer right-4 bottom-[30%] text-white"
+                    className="absolute cursor-pointer right-4 bottom-[30%] text-secondary"
                   />
                 ) : (
                   <FaRegEye
                     size={20}
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute cursor-pointer right-4 bottom-[30%] text-white"
+                    className="absolute cursor-pointer right-4 bottom-[30%] text-secondary"
                   />
                 )}
               </div>
@@ -151,7 +151,7 @@ export default function Login() {
                 ) : (
                   <button
                     type="submit"
-                    className="border py-2 w-full md:w-1/3 px-8 rounded-md hover:bg-white hover:text-black duration-300"
+                    className="border py-2 w-full md:w-1/3 px-8 rounded-md hover:bg-secondary hover:text-primary duration-300"
                   >
                     Entrar
                   </button>

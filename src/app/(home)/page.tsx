@@ -30,7 +30,7 @@ export default function Home() {
           <div className="w-full flex justify-end">
             <Link
               href="/login"
-              className="border py-2 px-8 rounded-md hover:bg-white hover:text-black duration-300"
+              className="border py-2 px-8 rounded-md hover:bg-secondary hover:text-primary duration-300"
             >
               Login
             </Link>

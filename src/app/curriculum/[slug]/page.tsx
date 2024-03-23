@@ -33,7 +33,7 @@ export default function CurriculumSlug({
   }
   return (
     <main
-      className={`w-full ${isGenetatingPdf && 'text-black'}`}
+      className={`w-full ${isGenetatingPdf && 'text-primary'}`}
       ref={targetRef}
     >
       <div className="w-full flex justify-center py-16" id="quem-somos">
@@ -45,13 +45,13 @@ export default function CurriculumSlug({
             <div className="flex items-center gap-4">
               <span className="text-xl">ID</span>
               <span
-                className={`rounded-md border ${isGenetatingPdf && 'border-black'} text-center px-4 py-2 hover:bg-white hover:text-black duration-300`}
+                className={`rounded-md border ${isGenetatingPdf && 'border-primary'} text-center px-4 py-2 hover:bg-secondary hover:text-primary duration-300`}
               >
                 Number
               </span>
             </div>
             <div
-              className={`flex items-center justify-center border ${isGenetatingPdf && 'border-black'} rounded-md px-4 py-2 gap-4 hover:bg-white hover:text-black duration-300`}
+              className={`flex items-center justify-center border ${isGenetatingPdf && 'border-primary'} rounded-md px-4 py-2 gap-4 hover:bg-secondary hover:text-primary duration-300`}
             >
               <span>Key</span>
               <IoShareSocial onClick={handleGeneratePDF} size={25} />
@@ -61,19 +61,16 @@ export default function CurriculumSlug({
           <p>Dados Pessoais</p>
 
           <div
-            className={`w-full flex p-4 justify-between text-center items-center border ${isGenetatingPdf && 'border-black'} rounded-md`}
+            className={`w-full flex p-4 justify-between text-center items-center border ${isGenetatingPdf && 'border-primary'} rounded-md`}
           >
             <div className="w-5/12 h-full flex items-center justify-center">
               <Avatar.Root
-                className={`border ${isGenetatingPdf && 'border-black'} inline-flex h-[200px] w-[200px] select-none items-center justify-center overflow-hidden rounded-full align-middle`}
+                className={`border ${isGenetatingPdf && 'border-primary'} inline-flex h-[200px] w-[200px] select-none items-center justify-center overflow-hidden rounded-full align-middle`}
               >
                 <Avatar.Fallback className="capitalize text-5xl flex h-full w-full items-center justify-center font-medium">
                   {initials}
                 </Avatar.Fallback>
               </Avatar.Root>
-              {/* <div className="flex items-center justify-center rounded-full border h-[200px] w-[200px] capitalize">
-                {params.slug}
-              </div> */}
             </div>
             <div className="flex flex-col gap-4 w-6/12">
               <div className="w-full text-center border rounded-md py-2">
@@ -98,7 +95,7 @@ export default function CurriculumSlug({
           </div>
           <p>Dados Profissionais</p>
           <div
-            className={`${isGenetatingPdf && 'border-black'} border rounded-md w-full flex items-center flex-col gap-4 p-8`}
+            className={`${isGenetatingPdf && 'border-primary'} border rounded-md w-full flex items-center flex-col gap-4 p-8`}
           >
             <Collapse
               title="Slot"
@@ -115,7 +112,7 @@ export default function CurriculumSlug({
           </div>
           <div className="w-full flex justify-between">
             <Link
-              className="w-1/3 md:w-1/4 border p-4 rounded-md text-center hover:bg-white hover:text-black duration-300"
+              className="w-1/3 md:w-1/4 border p-4 rounded-md text-center hover:bg-secondary hover:text-primary duration-300"
               href="/"
             >
               Sobre
