@@ -1,12 +1,14 @@
 'use client'
 
 import { ButtonBack } from '@/components/Buttons/back'
-import { Collapse } from '@/components/Collapses/collapse'
 import { IoShareSocial } from 'react-icons/io5'
 
 import * as Avatar from '@radix-ui/react-avatar'
 import { formatRoute } from '@/utils/formatRoute'
-import { FaMinus, FaPlus } from 'react-icons/fa6'
+import { ModalSaveCurriculum } from '@/components/Modals/save'
+import { ModalDeletCurriculum } from '@/components/Modals/delete'
+import { ModalPublishCurriculum } from '@/components/Modals/publish'
+import { TopicItem } from './components/topicItem'
 
 export default function CurriculumEditSlug({
   params,
@@ -105,62 +107,15 @@ export default function CurriculumEditSlug({
             </form>
           </div>
           <p>Dados Profissionais</p>
-          <div
-            className={`border rounded-md w-full flex items-center flex-col gap-4 p-8`}
-          >
-            <div className="flex w-full gap-4">
-              <Collapse
-                title="Slot"
-                content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit cupiditate beatae magni eaque fuga id ducimus adipisci ex. Dolorum iure quia iusto optio quam eligendi a dolores et magni impedit!"
-              />
-              <div className="flex gap-3 items-center">
-                <div className="p-2 border rounded-full cursor-pointer hover:scale-95 duration-200">
-                  <FaPlus className="" size={20} />
-                </div>
-                <div className="p-2 border rounded-full cursor-pointer hover:scale-95 duration-200">
-                  <FaMinus className="" size={20} />
-                </div>
-              </div>
-            </div>
-            <div className="flex w-full gap-4">
-              <Collapse
-                title="Slot 2"
-                content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit cupiditate beatae magni eaque fuga id ducimus adipisci ex. Dolorum iure quia iusto optio quam eligendi a dolores et magni impedit!"
-              />
-              <div className="flex gap-3 items-center">
-                <div className="p-2 border rounded-full cursor-pointer hover:scale-95 duration-200">
-                  <FaPlus className="" size={20} />
-                </div>
-                <div className="p-2 border rounded-full cursor-pointer hover:scale-95 duration-200">
-                  <FaMinus className="" size={20} />
-                </div>
-              </div>
-            </div>
-            <div className="flex w-full gap-4">
-              <Collapse
-                title="Slot 3"
-                content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit cupiditate beatae magni eaque fuga id ducimus adipisci ex. Dolorum iure quia iusto optio quam eligendi a dolores et magni impedit!"
-              />
-              <div className="flex gap-3 items-center">
-                <div className="p-2 border rounded-full cursor-pointer hover:scale-95 duration-200">
-                  <FaPlus className="" size={20} />
-                </div>
-                <div className="p-2 border rounded-full cursor-pointer hover:scale-95 duration-200">
-                  <FaMinus className="" size={20} />
-                </div>
-              </div>
-            </div>
+          <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+            <TopicItem />
+            <TopicItem />
+            <TopicItem />
           </div>
           <div className="w-full flex flex-col md:flex-row gap-4 md:justify-between">
-            <button className="w-full md:w-1/4 border p-4 rounded-md text-center hover:bg-secondary hover:text-primary duration-300">
-              Salvar
-            </button>
-            <button className="w-full md:w-1/4 border p-4 rounded-md text-center hover:bg-secondary hover:text-primary duration-300">
-              Deletar
-            </button>
-            <button className="w-full md:w-1/4 border p-4 rounded-md text-center hover:bg-secondary hover:text-primary duration-300">
-              Publicar
-            </button>
+            <ModalSaveCurriculum />
+            <ModalDeletCurriculum />
+            <ModalPublishCurriculum />
           </div>
         </div>
       </div>
