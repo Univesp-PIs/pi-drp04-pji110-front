@@ -3,6 +3,7 @@
 import { ButtonBack } from '@/components/Buttons/back'
 import Link from 'next/link'
 import { ItemCV } from './components/itemCV'
+import { ModalSearch } from '@/components/Modals/search'
 
 export default function Dashboard() {
   return (
@@ -74,12 +75,7 @@ export default function Dashboard() {
             >
               Sobre
             </Link>
-            <Link
-              className="w-1/3 md:w-1/4 border p-4 rounded-md text-center hover:bg-secondary hover:text-primary duration-300"
-              href=""
-            >
-              Buscar
-            </Link>
+            <ModalSearch />
           </div>
         </div>
       </div>
