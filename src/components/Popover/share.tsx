@@ -20,7 +20,9 @@ export function PopoverShare() {
           sideOffset={5}
         >
           <div className="flex flex-col gap-2.5">
-            <p className="text-primary font-medium mb-2.5">Menu de ações</p>
+            <p className="text-primary font-medium mb-2.5 text-center">
+              Menu de ações
+            </p>
             <Link
               href=""
               className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
