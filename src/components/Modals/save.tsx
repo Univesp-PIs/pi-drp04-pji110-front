@@ -21,12 +21,16 @@ export function ModalSaveCurriculum() {
             Tem certeza que deseja salvar?
           </Dialog.Description>
           <div className="w-full flex gap-4">
-            <button className="p-4 border rounded-md w-full text-center bg-red-500 text-white">
-              Não
-            </button>
-            <button className="p-4 border rounded-md w-full text-center bg-green-500 text-white">
-              Sim
-            </button>
+            <Dialog.Close asChild>
+              <button className="p-4 border rounded-md w-full text-center bg-red-500 text-white">
+                Não
+              </button>
+            </Dialog.Close>
+            <Dialog.Close asChild>
+              <button className="p-4 border rounded-md w-full text-center bg-green-500 text-white">
+                Sim
+              </button>
+            </Dialog.Close>
           </div>
           <Dialog.Close asChild>
             <button

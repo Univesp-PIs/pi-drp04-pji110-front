@@ -1,7 +1,10 @@
-'use client'
-
 import * as Dialog from '@radix-ui/react-dialog'
 import { FaPlus, FaX } from 'react-icons/fa6'
+import { LinksForm } from '../Forms/links'
+import { ResumeForm } from '../Forms/resume'
+import { ExperienceForm } from '../Forms/experience'
+import { EducationForm } from '../Forms/education'
+import { SkillsForm } from '../Forms/skills'
 
 export function ModalAddTopic() {
   return (
@@ -21,21 +24,11 @@ export function ModalAddTopic() {
             Selecione o tipo de tópico que deseja adicionar
           </Dialog.Description>
           <div className="w-full flex flex-col gap-4">
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Links
-            </button>
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Resumo
-            </button>
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Experiência
-            </button>
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Graduação
-            </button>
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Skills
-            </button>
+            <LinksForm />
+            <ResumeForm />
+            <ExperienceForm />
+            <EducationForm />
+            <SkillsForm />
             <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
               Novo (+)
             </button>

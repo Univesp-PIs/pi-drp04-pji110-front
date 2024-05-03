@@ -3,6 +3,10 @@ import { Poppins } from 'next/font/google'
 import './globals.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
+import { AuthProvider } from '../contexts/AuthContex'
+
+import ProviderQueryClient from '../contexts/QueriesContext'
+import { CreateCurriculumContextProvider } from '@/contexts/CreateCurriculumContext'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -22,8 +26,14 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={poppins.className}>
-        <ToastContainer />
-        {children}
+        <ProviderQueryClient>
+          <ToastContainer />
+          <AuthProvider>
+            <CreateCurriculumContextProvider>
+              {children}
+            </CreateCurriculumContextProvider>
+          </AuthProvider>
+        </ProviderQueryClient>
       </body>
     </html>
   )

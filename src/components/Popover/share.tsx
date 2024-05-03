@@ -3,7 +3,11 @@
 import * as Popover from '@radix-ui/react-popover'
 import Link from 'next/link'
 import { FaChevronDown, FaX } from 'react-icons/fa6'
-export function PopoverShare() {
+
+interface IPopoverShare {
+  id: string
+}
+export function PopoverShare({ id }: IPopoverShare) {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
@@ -24,7 +28,7 @@ export function PopoverShare() {
               Menu de ações
             </p>
             <Link
-              href=""
+              href={`/curriculum/${id}`}
               className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
             >
               Visualizar
