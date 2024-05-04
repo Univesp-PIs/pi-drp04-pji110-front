@@ -27,9 +27,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={poppins.className}>
         <ProviderQueryClient>
-          <ToastContainer />
           <AuthProvider>
             <CreateCurriculumContextProvider>
+              <ToastContainer />
               {children}
             </CreateCurriculumContextProvider>
           </AuthProvider>

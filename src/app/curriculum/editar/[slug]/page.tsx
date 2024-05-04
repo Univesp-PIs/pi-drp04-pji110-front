@@ -5,10 +5,10 @@ import { IoShareSocial } from 'react-icons/io5'
 
 import * as Avatar from '@radix-ui/react-avatar'
 import { formatRoute } from '@/utils/formatRoute'
-import { ModalSaveCurriculum } from '@/components/Modals/save'
-import { ModalDeletCurriculum } from '@/components/Modals/delete'
-import { ModalPublishCurriculum } from '@/components/Modals/publish'
-import { TopicItem } from './components/topicItem'
+// import { ModalSaveCurriculum } from '@/components/Modals/save'
+// import { ModalDeletCurriculum } from '@/components/Modals/delete'
+// import { ModalPublishCurriculum } from '@/components/Modals/publish'
+// import { TopicItem } from './components/topicItem'
 
 export default function CurriculumEditSlug({
   params,
@@ -108,14 +108,14 @@ export default function CurriculumEditSlug({
           </div>
           <p>Dados Profissionais</p>
           <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+            {/* <TopicItem />
             <TopicItem />
-            <TopicItem />
-            <TopicItem />
+            <TopicItem /> */}
           </div>
           <div className="w-full flex flex-col md:flex-row gap-4 md:justify-between">
-            <ModalSaveCurriculum />
+            {/* <ModalSaveCurriculum />
             <ModalDeletCurriculum />
-            <ModalPublishCurriculum />
+            <ModalPublishCurriculum /> */}
           </div>
         </div>
       </div>

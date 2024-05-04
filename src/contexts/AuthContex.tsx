@@ -10,7 +10,7 @@ import {
   useState,
 } from 'react'
 import { useRouter } from 'next/navigation'
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { destroyCookie, setCookie } from 'nookies'
 import { api } from '../services/apiClient'
 import { toast } from 'react-toastify'
 
@@ -64,17 +64,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [router, isAuthenticated])
 
-  useEffect(() => {
-    const { 'curriculum42.data': data } = parseCookies()
+  // useEffect(() => {
+  //   const { 'curriculum42.data': data } = parseCookies()
 
-    if (data) {
-      const { user_id, user_email, expiry_timestamp, user_name, token } =
-        JSON.parse(data)
-      setUser({ user_id, user_email, expiry_timestamp, user_name, token })
-    } else {
-      signOut()
-    }
-  }, [])
+  //   if (data) {
+  //     const { user_id, user_email, expiry_timestamp, user_name, token } =
+  //       JSON.parse(data)
+  //     setUser({ user_id, user_email, expiry_timestamp, user_name, token })
+  //   } else {
+  //     signOut()
+  //   }
+  // }, [])
 
   async function signIn({ email, password }: SignInCredentials) {
     try {

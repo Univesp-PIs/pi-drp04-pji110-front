@@ -34,6 +34,8 @@ export function ModalSearch() {
   function handleRegister(data: schemaRegisterProps) {
     setIsSubmitting(true)
 
+    console.log(data)
+
     reset()
 
     toast.error('Ainda não implementado :(')
