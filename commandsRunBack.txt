@@ -1,0 +1,5 @@
+.venv\Scripts\activate
+
+cd .\backend\src
+
+python manage.py runserver

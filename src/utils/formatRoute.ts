@@ -1,9 +1,9 @@
-export function formatRoute(route: string): {
+export function formatRoute(route: string | undefined): {
   fullName: string
   initials: string
 } {
   // Remover qualquer caractere de codificação de espaço (%20) e substituir por espaços normais
-  const decodedRoute = decodeURIComponent(route)
+  const decodedRoute = decodeURIComponent(route as string)
 
   // Dividir a rota pelos espaços
   const names = decodedRoute.split(' ')

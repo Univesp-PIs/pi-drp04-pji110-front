@@ -10,17 +10,28 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { BiLoaderAlt } from 'react-icons/bi'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
+import { AuthContext } from '@/contexts/AuthContex'
+import { useRouter } from 'next/navigation'
 
 const schema = z.object({
-  user: z.string().min(8, 'Digite seu usuário'),
-  password: z.string().min(8, 'Digite sua senha'),
+  email: z.string().email('Digite um email válido'),
+  password: z.string().min(8, 'A senha deve ter no mínimo 8 caracteres'),
 })
 
 type schemaLoginProps = z.infer<typeof schema>
 
 export default function Login() {
+  const { signIn, isAuthenticated } = useContext(AuthContext)
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard')
+    }
+  }, [isAuthenticated, router])
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
@@ -28,7 +39,6 @@ export default function Login() {
 
   const handleRecaptchaChange = (value: string | null) => {
     // Esta função será chamada quando o usuário completar o reCAPTCHA com sucesso.
-    // console.log('Valor do reCAPTCHA:', value);
     setRecaptchaValue(value)
   }
 
@@ -41,10 +51,8 @@ export default function Login() {
     resolver: zodResolver(schema),
   })
 
-  function handleLogin(data: schemaLoginProps) {
+  async function handleLogin(data: schemaLoginProps) {
     setIsSubmitting(true)
-
-    console.log(data)
 
     if (recaptchaValue === null) {
       toast.error('Preencha o re-captcha.', {
@@ -56,16 +64,20 @@ export default function Login() {
       return
     }
 
+    const fnSignIn = await signIn(data)
+
     // Incrementa a chave do reCAPTCHA para recriá-lo
     setRecaptchaKey(recaptchaKey + 1)
 
     reset()
 
-    toast.error('Ainda não implementado :(')
+    setIsSubmitting(false)
 
-    setTimeout(() => {
-      setIsSubmitting(false)
-    }, 2000)
+    if (fnSignIn) {
+      router.push('/dashboard')
+    }
+
+    toast.success('Login efetuado')
   }
 
   return (
@@ -94,13 +106,13 @@ export default function Login() {
               <input
                 placeholder="Digite seu usuário ou e-mail"
                 id="login"
-                {...register('user')}
+                {...register('email')}
                 type="text"
                 className="border rounded-md p-4 w-full bg-transparent"
               />
-              {errors.user && (
+              {errors.email && (
                 <p className="text-red-500 text-center md:text-left font-medium">
-                  {errors.user.message}
+                  {errors.email.message}
                 </p>
               )}
               <label htmlFor="password" className="text-left">
