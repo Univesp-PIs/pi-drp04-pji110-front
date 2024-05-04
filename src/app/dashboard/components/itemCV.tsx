@@ -3,9 +3,10 @@ import { PopoverShare } from '@/components/Popover/share'
 
 interface IItemCV {
   data: ICurriculum
+  isMy?: boolean
 }
 
-export function ItemCV({ data }: IItemCV) {
+export function ItemCV({ data, isMy }: IItemCV) {
   const { name, title, id } = data
 
   return (
@@ -15,7 +16,7 @@ export function ItemCV({ data }: IItemCV) {
         <div className="w-1/2 text-right">{title}</div>
       </div>
 
-      <PopoverShare id={id} />
+      <PopoverShare id={id} isMy={isMy} />
     </div>
   )
 }

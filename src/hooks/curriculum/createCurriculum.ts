@@ -6,7 +6,17 @@ import { toast } from 'react-toastify'
 
 const fetchCreateCurriculum = async (params: ICreateCurriculum) => {
   const { data } = await api.post(`/curriculum/create/${params.user.id}`, {
-    user: params.user,
+    user: {
+      name: params.user.name,
+      title: params.user.title,
+      email: params.user.email,
+      phone: params.user.phone,
+      location: params.user.location,
+      avatar: '',
+      gender: params.user.gender,
+      pronoun: params.user.pronoun,
+      description: params.user.description,
+    },
     links: params.links,
     experience: params.experience,
     education: params.education,

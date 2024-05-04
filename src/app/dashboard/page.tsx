@@ -8,15 +8,16 @@ import { useListCurriculums } from '@/hooks/curriculum/listCurriculums'
 import { SkeletonDashboard } from '@/components/Skeletons/dashboard'
 import { useContext } from 'react'
 import { AuthContext } from '@/contexts/AuthContex'
+import { RiLogoutCircleLine } from 'react-icons/ri'
 
 export default function Dashboard() {
+  const { isAuthenticated, user, signOut } = useContext(AuthContext)
+
   const {
     data: dataListCurriculums,
     isLoading: isLoadingListCurriculums,
     error: errorListCurriculums,
-  } = useListCurriculums()
-
-  const { isAuthenticated } = useContext(AuthContext)
+  } = useListCurriculums(isAuthenticated ? String(user?.user_id) : '0')
 
   return (
     <>
@@ -28,6 +29,13 @@ export default function Dashboard() {
             <div className="max-w-screen-md w-full flex flex-col gap-16 items-center px-4 md:px-0">
               <div className="flex justify-between w-full items-center">
                 <ButtonBack />
+                {isAuthenticated && (
+                  <RiLogoutCircleLine
+                    size={80}
+                    className="test-white cursor-pointer"
+                    onClick={signOut}
+                  />
+                )}
                 {isAuthenticated && (
                   <div className="w-full flex justify-end">
                     <Link
@@ -90,7 +98,7 @@ export default function Dashboard() {
                       </div>
                     )}
                     {dataListCurriculums?.myCvs.map((curriculum) => (
-                      <ItemCV data={curriculum} key={curriculum.id} />
+                      <ItemCV data={curriculum} key={curriculum.id} isMy />
                     ))}
                   </div>
                 </div>

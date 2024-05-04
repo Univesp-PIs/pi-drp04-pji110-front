@@ -6,8 +6,9 @@ import { FaChevronDown, FaX } from 'react-icons/fa6'
 
 interface IPopoverShare {
   id: string
+  isMy?: boolean
 }
-export function PopoverShare({ id }: IPopoverShare) {
+export function PopoverShare({ id, isMy = false }: IPopoverShare) {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
@@ -33,12 +34,14 @@ export function PopoverShare({ id }: IPopoverShare) {
             >
               Visualizar
             </Link>
-            <Link
-              href=""
-              className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
-            >
-              Editar
-            </Link>
+            {isMy && (
+              <Link
+                href={`/curriculum/editar/${id}`}
+                className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
+              >
+                Editar
+              </Link>
+            )}
             <Link
               href=""
               className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"

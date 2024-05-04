@@ -28,12 +28,25 @@ type createEducation = {
 
 type createSkills = string[]
 
+type createCustom = {
+  title: string
+  description: string
+  topicType: {
+    type: 'graphic' | 'topics'
+    description?: string
+    percentage?: number
+    color?: string
+    topics?: string[]
+  }
+}[]
+
 interface DataCreateCurriculumContextType {
   dataLinks: {
     name: string
     url: string
   }[]
   setDataLinks: (data: createLink | any) => void
+
   dataResume: string
   setDataResume: ({ description }: createResume | any) => void
   dataExperience: {
@@ -43,6 +56,7 @@ interface DataCreateCurriculumContextType {
     description: string
   }[]
   setDataExperience: (data: createExperience | any) => void
+
   dataEducation: {
     institution: string
     course: string
@@ -50,8 +64,22 @@ interface DataCreateCurriculumContextType {
     description: string
   }[]
   setDataEducation: (data: createEducation | any) => void
+
   dataSkills: string[]
   setDataSkills: (data: createSkills | any) => void
+
+  dataCustom: {
+    title: string
+    description: string
+    topicType: {
+      type: 'graphic' | 'topics'
+      description?: string
+      percentage?: number
+      color?: string
+      topics?: string[]
+    }
+  }[]
+  setDataCustom: (data: createCustom | any) => void
 }
 
 export const CreateCurriculumContext = createContext(
@@ -70,6 +98,7 @@ export function CreateCurriculumContextProvider({
   const [dataExperience, setDataExperience] = useState([])
   const [dataEducation, setDataEducation] = useState([])
   const [dataSkills, setDataSkills] = useState([])
+  const [dataCustom, setDataCustom] = useState([])
 
   return (
     <CreateCurriculumContext.Provider
@@ -79,11 +108,13 @@ export function CreateCurriculumContextProvider({
         dataExperience,
         dataSkills,
         dataResume,
+        dataCustom,
         setDataLinks,
         setDataEducation,
         setDataExperience,
         setDataSkills,
         setDataResume,
+        setDataCustom,
       }}
     >
       {children}

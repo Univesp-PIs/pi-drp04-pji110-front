@@ -19,6 +19,18 @@ export interface CollapseProps {
     description: string
   }
   skill?: string
+  custom?: {
+    title: string
+    description: string
+    topicType: {
+      type: 'graphic' | 'topics'
+      description?: string
+      percentage?: number
+      color?: string
+      topics?: string[]
+    }
+  }
+
   type?:
     | 'default'
     | 'custom'

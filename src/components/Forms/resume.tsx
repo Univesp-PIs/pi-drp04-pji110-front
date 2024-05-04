@@ -16,7 +16,7 @@ const schema = z.object({
 type schemaAddResumeProps = z.infer<typeof schema>
 
 export function ResumeForm() {
-  const { setDataEducation } = useContext(CreateCurriculumContext)
+  const { setDataResume } = useContext(CreateCurriculumContext)
   const {
     register,
     handleSubmit,
@@ -28,7 +28,8 @@ export function ResumeForm() {
 
   function handleAddResume(data: schemaAddResumeProps) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setDataEducation((prev: any) => [...prev, data])
+
+    setDataResume(data.description)
 
     toast.success('Resumo adicionado com sucesso!')
     reset()

@@ -56,13 +56,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case 'signOut':
-          router.push('/login')
+          router.push('/')
           break
         default:
           break
       }
     }
-  }, [router])
+  }, [router, isAuthenticated])
 
   useEffect(() => {
     const { 'curriculum42.data': data } = parseCookies()
@@ -131,10 +131,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   function signOut() {
     destroyCookie(undefined, 'curriculum42.token')
     destroyCookie(undefined, 'curriculum42.data')
+    toast.success('Você saiu da sua conta!')
 
     authChannel.postMessage('signOut')
+    setUser(undefined)
 
-    router.push('/auth')
+    router.push('/')
   }
   return (
     <AuthContext.Provider

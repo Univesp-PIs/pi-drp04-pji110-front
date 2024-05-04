@@ -32,7 +32,6 @@ export function setupAPIClient(ctx: Context = undefined) {
     },
     (error: AxiosError<AxiosErrorResponse>) => {
       if (error.response?.status === 401) {
-        // console.log(error.response.data?.message)
         if (error.response.data?.message === 'Token inválido') {
           const originalConfig = error.config
 

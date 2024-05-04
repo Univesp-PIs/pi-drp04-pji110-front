@@ -1,13 +1,12 @@
 'use client'
 
 import { ButtonBack } from '@/components/Buttons/back'
-import { IoShareSocial } from 'react-icons/io5'
 
 import * as Avatar from '@radix-ui/react-avatar'
 import { formatRoute } from '@/utils/formatRoute'
 import { ModalSaveCurriculum } from '@/components/Modals/save'
 import { ModalPublishCurriculum } from '@/components/Modals/publish'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/contexts/AuthContex'
 import { TopicItem } from '../editar/[slug]/components/topicItem'
 import { useForm } from 'react-hook-form'
@@ -21,7 +20,8 @@ import { ModalAddTopic } from '@/components/Modals/addTopic'
 const schema = z.object({
   user: z.object({
     name: z
-      .string({ required_error: 'Nome obrigatório' })
+      .string()
+      .min(1, 'Campo obrigatório')
       .max(100, 'Máximo de 100 caracteres')
       .refine(
         (value) => {
@@ -33,25 +33,31 @@ const schema = z.object({
         },
       ),
     title: z
-      .string({ required_error: 'Profissão obrigatória' })
+      .string()
+      .min(1, 'Campo obrigatório')
       .max(100, 'Máximo de 100 caracteres'),
     email: z
-      .string({ required_error: 'Email obrigatório' })
+      .string()
+      .min(1, 'Campo obrigatório')
       .max(100, 'Máximo de 100 caracteres')
       .email('Digite um e-mail válido'),
     phone: z
-      .string({ required_error: 'Celular obrigatório' })
+      .string()
+      .min(1, 'Campo obrigatório')
       .max(20, 'Máximo de 20 caracteres'),
     location: z
-      .string({ required_error: 'Cidade/Estado obrigatória' })
+      .string()
+      .min(1, 'Campo obrigatório')
       .max(100, 'Máximo de 100 caracteres'),
     gender: z
-      .string({ required_error: 'Gênero obrigatório' })
+      .string()
+      .min(1, 'Campo obrigatório')
       .max(20, 'Máximo de 20 caracteres'),
     pronoun: z
-      .string({ required_error: 'Pronomes obrigatórios' })
+      .string()
+      .min(1, 'Campo obrigatório')
       .max(20, 'Máximo de 20 caracteres'),
-    description: z.string({ required_error: 'Descrição obrigatória' }),
+    description: z.string().optional(),
   }),
   links: z
     .array(
@@ -89,10 +95,10 @@ const schema = z.object({
         description: z.string(),
         topicType: z.object({
           type: z.enum(['graphic', 'topics']),
-          description: z.string(),
-          percentage: z.number().min(0).max(100),
-          color: z.string(),
-          topics: z.array(z.string()),
+          description: z.string().optional(),
+          percentage: z.number().min(0).max(100).optional(),
+          color: z.string().optional(),
+          topics: z.array(z.string()).optional(),
         }),
       }),
     )
@@ -105,43 +111,76 @@ export default function CurriculumAdd() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { user } = useContext(AuthContext)
   const [isPublished, setIsPublished] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const { dataLinks, dataEducation, dataExperience, dataResume, dataSkills } =
-    useContext(CreateCurriculumContext)
-
-  console.log(dataLinks)
+  const {
+    dataLinks,
+    dataEducation,
+    dataExperience,
+    dataResume,
+    dataSkills,
+    dataCustom,
+  } = useContext(CreateCurriculumContext)
 
   const { mutateAsync } = useCreateCurriculum()
+  const { fullName, initials } = formatRoute(user?.user_name)
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<schemaCreateCurriculumProps>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      user: {
+        name: fullName || '',
+      },
+    },
   })
 
-  const { fullName, initials } = formatRoute(user?.user_name)
+  useEffect(() => {
+    if (user?.user_name) {
+      reset({
+        user: {
+          name: fullName,
+        },
+      })
+    }
+  }, [reset, fullName, user?.user_name])
 
   async function handleCreateCurriculum(data: schemaCreateCurriculumProps) {
-    setIsSubmitting(true)
+    try {
+      setIsSubmitting(true)
 
-    await mutateAsync({
-      user: {
-        ...data.user,
-        id: user?.user_id as string,
-      },
-      links: data.links || [],
-      experience: data.experience || [],
-      education: data.education || [],
-      skills: data.skills || [],
-      Custom: data.Custom || [],
-    })
+      setValue('user.description', dataResume)
+      setValue('education', dataEducation)
+      setValue('experience', dataExperience)
+      setValue('links', dataLinks)
+      setValue('skills', dataSkills)
+      setValue('Custom', dataCustom)
 
-    setIsSubmitting(false)
+      await mutateAsync({
+        user: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ...(data.user as any),
+          id: user?.user_id as string,
+        },
+        links: data.links || [],
+        experience: data.experience || [],
+        education: data.education || [],
+        skills: data.skills || [],
+        Custom: data.Custom || [],
+      })
 
-    reset()
+      setIsSubmitting(false)
+
+      reset()
+    } catch (error) {
+      setIsSubmitting(false)
+      console.log(error)
+    }
   }
 
   return (
@@ -157,14 +196,8 @@ export default function CurriculumAdd() {
               <span
                 className={`rounded-md border text-center px-4 py-2 hover:bg-secondary hover:text-primary duration-300`}
               >
-                Number
+                {user?.user_id}
               </span>
-            </div>
-            <div
-              className={`flex items-center justify-center border rounded-md px-4 py-2 gap-4 hover:bg-secondary hover:text-primary duration-300`}
-            >
-              <span>Key</span>
-              <IoShareSocial size={25} />
             </div>
           </div>
 
@@ -198,7 +231,7 @@ export default function CurriculumAdd() {
                     {...register('user.name')}
                   />
                   {errors.user?.name && (
-                    <p className="text-red-500 text-center md:text-left font-medium">
+                    <p className="text-red-500 text-center font-medium">
                       {errors.user.name.message}
                     </p>
                   )}
@@ -211,7 +244,7 @@ export default function CurriculumAdd() {
                     {...register('user.location')}
                   />
                   {errors.user?.location && (
-                    <p className="text-red-500 text-center md:text-left font-medium">
+                    <p className="text-red-500 text-center font-medium">
                       {errors.user.location.message}
                     </p>
                   )}
@@ -224,7 +257,7 @@ export default function CurriculumAdd() {
                     {...register('user.title')}
                   />
                   {errors.user?.title && (
-                    <p className="text-red-500 text-center md:text-left font-medium">
+                    <p className="text-red-500 text-center font-medium">
                       {errors.user.title.message}
                     </p>
                   )}
@@ -238,7 +271,7 @@ export default function CurriculumAdd() {
                     {...register('user.email')}
                   />
                   {errors.user?.email && (
-                    <p className="text-red-500 text-center md:text-left font-medium">
+                    <p className="text-red-500 text-center font-medium">
                       {errors.user.email.message}
                     </p>
                   )}
@@ -253,7 +286,7 @@ export default function CurriculumAdd() {
                   />
 
                   {errors.user?.phone && (
-                    <p className="text-red-500 text-center md:text-left font-medium">
+                    <p className="text-red-500 text-center font-medium">
                       {errors.user.phone.message}
                     </p>
                   )}
@@ -267,7 +300,7 @@ export default function CurriculumAdd() {
                   />
 
                   {errors.user?.gender && (
-                    <p className="text-red-500 text-center md:text-left font-medium">
+                    <p className="text-red-500 text-center font-medium">
                       {errors.user.gender.message}
                     </p>
                   )}
@@ -281,13 +314,23 @@ export default function CurriculumAdd() {
                     {...register('user.pronoun')}
                   />
                   {errors.user?.pronoun && (
-                    <p className="text-red-500 text-center md:text-left font-medium">
+                    <p className="text-red-500 text-center font-medium">
                       {errors.user.pronoun.message}
                     </p>
                   )}
                 </fieldset>
               </form>
             </div>
+            {dataResume && (
+              <div className="w-full flex flex-col gap-4 p-8">
+                <p className="text-2xl">Resumo</p>
+                <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                  <div>
+                    <p>{dataResume}</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           {dataEducation.length > 0 && (
             <>
@@ -356,9 +399,31 @@ export default function CurriculumAdd() {
             </>
           )}
 
+          {dataCustom.length > 0 && (
+            <>
+              <p className="text-2xl">Outros</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataCustom.map((custom) => (
+                  <TopicItem
+                    type="custom"
+                    key={custom.title}
+                    custom={custom}
+                    titleCollapse={custom.title}
+                    contentCollapse={custom.description}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
           <div className="w-full flex flex-col md:flex-row items-center gap-4 md:justify-between">
-            <ModalSaveCurriculum />
-            <ModalAddTopic />
+            <ModalSaveCurriculum
+              handleSubmit={handleSubmit(handleCreateCurriculum)}
+              isSubmitting={isSubmitting}
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <ModalAddTopic isPulse />
             <ModalPublishCurriculum
               isPublished={isPublished}
               setIsPublished={setIsPublished}

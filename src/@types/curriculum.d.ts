@@ -99,10 +99,10 @@ export interface ICreateCurriculum {
     description: string
     topicType: {
       type: 'graphic' | 'topics'
-      description: string
-      percentage: number
-      color: string
-      topics: string[]
+      description?: string
+      percentage?: number
+      color?: string
+      topics?: string[]
     }
   }[]
 }

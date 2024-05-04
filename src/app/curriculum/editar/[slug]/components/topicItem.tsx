@@ -22,6 +22,17 @@ interface TopicItemProps {
     description: string
   }
   skill?: string
+  custom?: {
+    title: string
+    description: string
+    topicType: {
+      type: 'graphic' | 'topics'
+      description?: string
+      percentage?: number
+      color?: string
+      topics?: string[]
+    }
+  }
   type?:
     | 'default'
     | 'custom'
@@ -40,6 +51,7 @@ export function TopicItem({
   experience,
   education,
   skill,
+  custom,
 }: TopicItemProps) {
   return (
     <div className="flex w-full gap-4">
@@ -51,10 +63,18 @@ export function TopicItem({
         skill={skill}
         education={education}
         experience={experience}
+        custom={custom}
       />
       <div className="flex gap-3 items-center">
         <ModalAddTopic />
-        <ModalDeletTopic />
+        <ModalDeletTopic
+          link={link}
+          skill={skill}
+          education={education}
+          experience={experience}
+          custom={custom}
+          type={type}
+        />
       </div>
     </div>
   )

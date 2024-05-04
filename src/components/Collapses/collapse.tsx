@@ -12,6 +12,7 @@ export function Collapse({
   link,
   experience,
   education,
+  custom,
   skill,
 }: CollapseProps) {
   const [open, setOpen] = useState(false)
@@ -167,6 +168,55 @@ export function Collapse({
             />
           </Collapsible.Trigger>
         </div>
+      </Collapsible.Root>
+    )
+  }
+
+  if (type === 'custom') {
+    return (
+      <Collapsible.Root
+        defaultOpen
+        className="border rounded-md p-4 w-full text-center hover:bg-neutral-900 duration-300"
+        open={open}
+        onOpenChange={setOpen}
+      >
+        <div
+          className={`flex items-center cursor-pointer justify-between ${open && 'pb-3'}`}
+          onClick={() => setOpen(!open)}
+        >
+          {custom?.title}
+          <Collapsible.Trigger asChild>
+            <IoIosArrowDown
+              size={20}
+              className={`${open && 'rotate-180'} duration-300`}
+            />
+          </Collapsible.Trigger>
+        </div>
+
+        <Collapsible.Content className="CollapsibleContent">
+          <div className="py-4 text-left border-t">
+            <div>
+              <p>Título: {custom?.title}</p>
+              <p>Descrição: {custom?.description}</p>
+              <p>Tipo: {custom?.topicType.type}</p>
+              {custom?.topicType.type === 'graphic' && (
+                <>
+                  <p>Descrição: {custom.topicType.description}</p>
+                  <p>Porcentagem: {custom.topicType.percentage}</p>
+                  <p>Cor: {custom.topicType.color}</p>
+                </>
+              )}
+              {custom?.topicType.type === 'topics' && (
+                <>
+                  <p>Tópicos</p>
+                  {custom?.topicType?.topics?.map((topic) => (
+                    <p key={topic}>{topic}</p>
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+        </Collapsible.Content>
       </Collapsible.Root>
     )
   }

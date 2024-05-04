@@ -1,14 +1,28 @@
-'use client'
-
 import * as Dialog from '@radix-ui/react-dialog'
-import { FaX } from 'react-icons/fa6'
+import { FaSpinner, FaX } from 'react-icons/fa6'
 
-export function ModalSaveCurriculum() {
+interface ModalSaveCurriculumProps {
+  handleSubmit: () => void
+  isSubmitting?: boolean
+  isModalOpen: boolean
+  setIsModalOpen: (value: boolean) => void
+}
+
+export function ModalSaveCurriculum({
+  handleSubmit,
+  isSubmitting,
+  isModalOpen,
+  setIsModalOpen,
+}: ModalSaveCurriculumProps) {
   return (
-    <Dialog.Root>
+    <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
       <Dialog.Trigger asChild>
-        <button className="w-full md:w-1/4 border p-4 rounded-md text-center hover:bg-secondary hover:text-primary duration-300">
-          Salvar
+        <button className="w-full md:w-1/4 flex justify-center items-center border p-4 rounded-md text-center hover:bg-secondary hover:text-primary duration-300">
+          {isSubmitting ? (
+            <FaSpinner className="animate-spin text-xl text-white" size={23} />
+          ) : (
+            'Salvar'
+          )}
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -26,11 +40,16 @@ export function ModalSaveCurriculum() {
                 Não
               </button>
             </Dialog.Close>
-            <Dialog.Close asChild>
-              <button className="p-4 border rounded-md w-full text-center bg-green-500 text-white">
-                Sim
-              </button>
-            </Dialog.Close>
+
+            <button
+              onClick={() => {
+                handleSubmit()
+                setIsModalOpen(false)
+              }}
+              className="p-4 border rounded-md w-full text-center bg-green-500 text-white"
+            >
+              Sim
+            </button>
           </div>
           <Dialog.Close asChild>
             <button

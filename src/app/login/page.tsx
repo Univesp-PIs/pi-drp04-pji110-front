@@ -39,7 +39,6 @@ export default function Login() {
 
   const handleRecaptchaChange = (value: string | null) => {
     // Esta função será chamada quando o usuário completar o reCAPTCHA com sucesso.
-    // console.log('Valor do reCAPTCHA:', value);
     setRecaptchaValue(value)
   }
 

@@ -5,13 +5,20 @@ import { ResumeForm } from '../Forms/resume'
 import { ExperienceForm } from '../Forms/experience'
 import { EducationForm } from '../Forms/education'
 import { SkillsForm } from '../Forms/skills'
+import { CustomForm } from '../Forms/custom'
 
-export function ModalAddTopic() {
+interface ModalAddTopicProps {
+  isPulse?: boolean
+}
+
+export function ModalAddTopic({ isPulse = false }: ModalAddTopicProps) {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <div className="p-2 border rounded-full cursor-pointer hover:scale-95 duration-200">
-          <FaPlus className="" size={20} />
+        <div
+          className={`p-2 border rounded-full cursor-pointer hover:scale-95 duration-200 ${isPulse && 'animate-bounce'}`}
+        >
+          <FaPlus size={isPulse ? 30 : 20} />
         </div>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -29,9 +36,7 @@ export function ModalAddTopic() {
             <ExperienceForm />
             <EducationForm />
             <SkillsForm />
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Novo (+)
-            </button>
+            <CustomForm />
           </div>
 
           <Dialog.Close asChild>
