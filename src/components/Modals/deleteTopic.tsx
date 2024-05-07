@@ -1,9 +1,112 @@
 'use client'
 
+import { CreateCurriculumContext } from '@/contexts/CreateCurriculumContext'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useContext } from 'react'
 import { FaMinus, FaX } from 'react-icons/fa6'
+import { toast } from 'react-toastify'
 
-export function ModalDeletTopic() {
+interface ModalDeletTopicProps {
+  link?: {
+    name: string
+    url: string
+  }
+  experience?: {
+    company: string
+    position: string
+    period: string
+    description: string
+  }
+  education?: {
+    institution: string
+    course: string
+    period: string
+    description: string
+  }
+  skill?: string
+  type?:
+    | 'default'
+    | 'custom'
+    | 'education'
+    | 'experience'
+    | 'skills'
+    | 'links'
+    | 'resume'
+
+  custom?: {
+    title: string
+    description: string
+    topicType: {
+      type: 'graphic' | 'topics'
+      description?: string
+      percentage?: number
+      color?: string
+      topics?: string[]
+    }
+  }
+}
+
+export function ModalDeletTopic({
+  link,
+  experience,
+  education,
+  skill,
+  custom,
+  type,
+}: ModalDeletTopicProps) {
+  const {
+    dataEducation,
+    dataExperience,
+    dataLinks,
+    dataSkills,
+    dataCustom,
+    setDataEducation,
+    setDataExperience,
+    setDataLinks,
+    setDataResume,
+    setDataSkills,
+    setDataCustom,
+  } = useContext(CreateCurriculumContext)
+
+  function handleDelete() {
+    if (type === 'education') {
+      const newData = dataEducation.filter(
+        (item) =>
+          item.institution !== education?.institution &&
+          item.course !== education?.course &&
+          item.period !== education?.period,
+      )
+      setDataEducation(newData)
+    } else if (type === 'experience') {
+      const newData = dataExperience.filter(
+        (item) =>
+          item.company !== experience?.company &&
+          item.position !== experience?.position &&
+          item.period !== experience?.period,
+      )
+      setDataExperience(newData)
+    } else if (type === 'links') {
+      const newData = dataLinks.filter(
+        (item) => item.name !== link?.name && item.url !== link?.url,
+      )
+      setDataLinks(newData)
+    } else if (type === 'resume') {
+      setDataResume('')
+    } else if (type === 'skills') {
+      const newData = dataSkills.filter((item) => item !== skill)
+      setDataSkills(newData)
+    } else if (type === 'custom') {
+      const newData = dataCustom.filter(
+        (item) =>
+          item.title !== custom?.title &&
+          item.description !== custom?.description,
+      )
+      setDataCustom(newData)
+    }
+
+    toast.success('Removido com sucesso!')
+  }
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -21,12 +124,16 @@ export function ModalDeletTopic() {
             Tem certeza que deseja deletar?
           </Dialog.Description>
           <div className="w-full flex gap-4">
-            <button className="p-4 border rounded-md w-full text-center bg-green-500 text-white">
-              Não
-            </button>
-            <button className="p-4 border rounded-md w-full text-center bg-red-500 text-white">
-              Sim
-            </button>
+            <Dialog.Close asChild>
+              <button className="p-4 border rounded-md w-full text-center bg-green-500 text-white">
+                Não
+              </button>
+            </Dialog.Close>
+            <Dialog.Close asChild onClick={handleDelete}>
+              <button className="p-4 border rounded-md w-full text-center bg-red-500 text-white">
+                Sim
+              </button>
+            </Dialog.Close>
           </div>
           <Dialog.Close asChild>
             <button

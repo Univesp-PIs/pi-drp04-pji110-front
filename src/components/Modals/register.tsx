@@ -10,12 +10,19 @@ import { z } from 'zod'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { BiLoaderAlt } from 'react-icons/bi'
 import { useState } from 'react'
+import { useCreateUser } from '@/hooks/users/createUser'
 
 const schema = z
   .object({
-    name: z
-      .string({ required_error: 'Nome obrigatório' })
-      .min(3, 'Digite seu nome'),
+    name: z.string({ required_error: 'Nome obrigatório' }).refine(
+      (value) => {
+        const names = value.split(' ')
+        return names.length === 2 && names.every((name) => name.length > 0)
+      },
+      {
+        message: 'Por favor, insira o nome e sobrenome.',
+      },
+    ),
     email: z
       .string({ required_error: 'Email obrigatório' })
       .email('Digite um e-mail válido'),
@@ -38,10 +45,12 @@ export function ModalRegister() {
   const [showPassword, setShowPassword] = useState(false)
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false)
+  const [open, setOpen] = useState(false)
+
+  const { isPending, mutateAsync } = useCreateUser()
 
   const handleRecaptchaChange = (value: string | null) => {
     // Esta função será chamada quando o usuário completar o reCAPTCHA com sucesso.
-    // console.log('Valor do reCAPTCHA:', value);
     setRecaptchaValue(value)
   }
 
@@ -54,10 +63,8 @@ export function ModalRegister() {
     resolver: zodResolver(schema),
   })
 
-  function handleRegister(data: schemaRegisterProps) {
+  async function handleRegister(data: schemaRegisterProps) {
     setIsSubmitting(true)
-
-    console.log(data)
 
     if (recaptchaValue === null) {
       toast.error('Preencha o re-captcha.', {
@@ -72,16 +79,20 @@ export function ModalRegister() {
     // Incrementa a chave do reCAPTCHA para recriá-lo
     setRecaptchaKey(recaptchaKey + 1)
 
+    await mutateAsync({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    })
+
+    setIsSubmitting(false)
+
+    setOpen(false)
+
     reset()
-
-    toast.error('Ainda não implementado :(')
-
-    setTimeout(() => {
-      setIsSubmitting(false)
-    }, 2000)
   }
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
         <button className="border text-center py-2 px-8 md:w-1/3 font-medium rounded-md bg-secondary text-primary hover:bg-primary hover:text-secondary duration-300">
           Cadastrar
@@ -102,13 +113,13 @@ export function ModalRegister() {
           >
             <fieldset className="flex flex-col w-full gap-2">
               <label className="text-primary" htmlFor="name">
-                Nome
+                Nome completo
               </label>
               <input
                 className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
                 id="name"
                 {...register('name')}
-                placeholder="Digite seu nome"
+                placeholder="Digite seu nome completo"
               />
               {errors.name && (
                 <p className="text-red-500 text-center md:text-left font-medium">
@@ -210,7 +221,7 @@ export function ModalRegister() {
                 sitekey="6LfAsJ8pAAAAAE3xoB7M7CMpzsJ9pyCc8a7r7N6I"
                 onChange={handleRecaptchaChange}
               />
-              {isSubmitting ? (
+              {isSubmitting || isPending ? (
                 <div className="cursor-not-allowed flex justify-center border bg-primary text-secondary text-center py-2 px-8 font-medium rounded-md hover:scale-95 duration-300">
                   <BiLoaderAlt
                     className="animate-spin cursor-not-allowed"
