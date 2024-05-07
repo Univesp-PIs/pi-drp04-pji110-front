@@ -73,6 +73,8 @@ export interface ICreateCurriculum {
     pronoun: string
     description: string
     id: string
+    published: boolean
+    access_level: 'Private' | 'Public'
   }
   links: {
     name: string

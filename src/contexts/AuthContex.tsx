@@ -9,8 +9,8 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { useRouter } from 'next/navigation'
-import { destroyCookie, setCookie } from 'nookies'
+import { usePathname, useRouter } from 'next/navigation'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { api } from '../services/apiClient'
 import { toast } from 'react-toastify'
 
@@ -45,6 +45,7 @@ let authChannel: BroadcastChannel
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter()
+  const pathname = usePathname()
 
   const [user, setUser] = useState<User>()
 
@@ -64,17 +65,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [router, isAuthenticated])
 
-  // useEffect(() => {
-  //   const { 'curriculum42.data': data } = parseCookies()
+  useEffect(() => {
+    const { 'curriculum42.data': data } = parseCookies()
 
-  //   if (data) {
-  //     const { user_id, user_email, expiry_timestamp, user_name, token } =
-  //       JSON.parse(data)
-  //     setUser({ user_id, user_email, expiry_timestamp, user_name, token })
-  //   } else {
-  //     signOut()
-  //   }
-  // }, [])
+    if (data) {
+      const { user_id, user_email, expiry_timestamp, user_name, token } =
+        JSON.parse(data)
+      setUser({ user_id, user_email, expiry_timestamp, user_name, token })
+    } else if (
+      pathname.includes('curriculum/adicionar') ||
+      pathname.includes('curriculum/editar')
+    ) {
+      router.push('/')
+    }
+  }, [router, pathname])
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
@@ -116,14 +120,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       })
 
       // api.defaults.headers.Authorization = `Bearer ${token}`
-
+      toast.success('Login efetuado')
       router.push('/dashboard')
       return true
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toast.error(`${err.response.data.message}`)
-      console.log(err)
+      toast.error(`${err.response.data.error}`)
       return false
     }
   }
