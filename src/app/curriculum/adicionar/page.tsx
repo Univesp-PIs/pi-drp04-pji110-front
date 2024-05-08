@@ -205,6 +205,7 @@ export default function CurriculumAdd() {
                 className={`rounded-md border text-center px-4 py-2 hover:bg-secondary hover:text-primary duration-300`}
               >
                 {user?.user_id}
+                {user?.user_id}
               </span>
             </div>
           </div>
@@ -213,6 +214,7 @@ export default function CurriculumAdd() {
             <h2 className="text-3xl font-bold">Criar Currículum</h2>
           </div>
 
+          <p className="text-2xl">Dados Pessoais</p>
           <p className="text-2xl">Dados Pessoais</p>
           <div
             className={`w-full flex flex-col gap-y-4 text-center items-center border rounded-md`}
@@ -371,6 +373,101 @@ export default function CurriculumAdd() {
               </div>
             )}
           </div>
+          {dataEducation.length > 0 && (
+            <>
+              <p className="text-2xl">Dados Educacionais</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataEducation.map((education) => (
+                  <TopicItem
+                    key={education.course}
+                    titleCollapse="Educação"
+                    contentCollapse={education.course}
+                    type="education"
+                    education={education}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+          {dataExperience.length > 0 && (
+            <>
+              <p className="text-2xl">Dados Profissionais</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataExperience.map((experience) => (
+                  <TopicItem
+                    key={experience.company}
+                    titleCollapse="Experiência"
+                    contentCollapse={experience.company}
+                    type="experience"
+                    experience={experience}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {dataLinks.length > 0 && (
+            <>
+              <p className="text-2xl">Links</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataLinks.map((link) => (
+                  <TopicItem
+                    type="links"
+                    key={link.name}
+                    link={link}
+                    titleCollapse={link.name}
+                    contentCollapse={link.url}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {dataSkills.length > 0 && (
+            <>
+              <p className="text-2xl">Skills</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataSkills.map((skill) => (
+                  <TopicItem
+                    type="skills"
+                    key={skill}
+                    skill={skill}
+                    titleCollapse="Skill"
+                    contentCollapse={skill}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {dataCustom.length > 0 && (
+            <>
+              <p className="text-2xl">Outros</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataCustom.map((custom) => (
+                  <TopicItem
+                    type="custom"
+                    key={custom.title}
+                    custom={custom}
+                    titleCollapse={custom.title}
+                    contentCollapse={custom.description}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          <div className="w-full flex flex-col md:flex-row items-center gap-4 md:justify-between">
+            <ModalSaveCurriculum
+              handleSubmit={handleSubmit(handleCreateCurriculum)}
+              isSubmitting={isSubmitting}
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <ModalAddTopic isPulse />
+            <ModalPublishCurriculum
+              isPublished={isPublished}
+              setIsPublished={setIsPublished}
           {dataEducation.length > 0 && (
             <>
               <p className="text-2xl">Dados Educacionais</p>
