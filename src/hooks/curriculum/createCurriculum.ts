@@ -16,6 +16,8 @@ const fetchCreateCurriculum = async (params: ICreateCurriculum) => {
       gender: params.user.gender,
       pronoun: params.user.pronoun,
       description: params.user.description,
+      published: params.user.published,
+      access_level: params.user.access_level,
     },
     links: params.links,
     experience: params.experience,

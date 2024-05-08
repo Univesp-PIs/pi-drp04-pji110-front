@@ -3,19 +3,20 @@
 import { ButtonBack } from '@/components/Buttons/back'
 
 import * as Avatar from '@radix-ui/react-avatar'
+import * as Switch from '@radix-ui/react-switch'
 import { formatRoute } from '@/utils/formatRoute'
 import { ModalSaveCurriculum } from '@/components/Modals/save'
 import { ModalPublishCurriculum } from '@/components/Modals/publish'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/contexts/AuthContex'
-import { TopicItem } from '../editar/[slug]/components/topicItem'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useCreateCurriculum } from '@/hooks/curriculum/createCurriculum'
 import { InputCurriculum } from '@/components/Inputs/inputCurriculum'
 import { CreateCurriculumContext } from '@/contexts/CreateCurriculumContext'
 import { ModalAddTopic } from '@/components/Modals/addTopic'
+import { TopicItem } from '@/components/topicItem'
 
 const schema = z.object({
   user: z.object({
@@ -58,6 +59,8 @@ const schema = z.object({
       .min(1, 'Campo obrigatório')
       .max(20, 'Máximo de 20 caracteres'),
     description: z.string().optional(),
+    published: z.boolean(),
+    access_level: z.string().optional(),
   }),
   links: z
     .array(
@@ -129,6 +132,7 @@ export default function CurriculumAdd() {
     register,
     handleSubmit,
     reset,
+    control,
     setValue,
     formState: { errors },
   } = useForm<schemaCreateCurriculumProps>({
@@ -136,6 +140,7 @@ export default function CurriculumAdd() {
     defaultValues: {
       user: {
         name: fullName || '',
+        published: false,
       },
     },
   })
@@ -154,12 +159,15 @@ export default function CurriculumAdd() {
     try {
       setIsSubmitting(true)
 
+      const AccessLevel = isPublished ? 'Public' : 'Private'
+
       setValue('user.description', dataResume)
       setValue('education', dataEducation)
       setValue('experience', dataExperience)
       setValue('links', dataLinks)
       setValue('skills', dataSkills)
       setValue('Custom', dataCustom)
+      setValue('user.access_level', AccessLevel)
 
       await mutateAsync({
         user: {
@@ -197,10 +205,16 @@ export default function CurriculumAdd() {
                 className={`rounded-md border text-center px-4 py-2 hover:bg-secondary hover:text-primary duration-300`}
               >
                 {user?.user_id}
+                {user?.user_id}
               </span>
             </div>
           </div>
 
+          <div className="w-full flex justify-center">
+            <h2 className="text-3xl font-bold">Criar Currículum</h2>
+          </div>
+
+          <p className="text-2xl">Dados Pessoais</p>
           <p className="text-2xl">Dados Pessoais</p>
           <div
             className={`w-full flex flex-col gap-y-4 text-center items-center border rounded-md`}
@@ -216,8 +230,6 @@ export default function CurriculumAdd() {
                     {initials}
                   </Avatar.Fallback>
                 </Avatar.Root>
-                <div className="text-green-500">Criado em: 23/03/2024</div>
-                <div className="text-yellow-400">Atualizado em: 23/03/2024</div>
               </div>
               <form
                 className="flex flex-col gap-4 w-full md:w-6/12"
@@ -319,6 +331,35 @@ export default function CurriculumAdd() {
                     </p>
                   )}
                 </fieldset>
+                <fieldset className="flex items-center justify-center flex-col gap-2">
+                  <div className="flex items-center justify-center gap-2">
+                    <label
+                      className="text-white text-lg leading-none"
+                      htmlFor="airplane-mode"
+                    >
+                      Publicado:
+                    </label>
+                    <Controller
+                      control={control}
+                      name="user.published"
+                      render={({ field }) => (
+                        <Switch.Root
+                          className="w-[42px] h-[25px] bg-white rounded-full relative shadow-[0_2px_10px] shadow-white focus:shadow-[0_0_0_2px] focus:shadow-black data-[state=checked]:bg-green-500 outline-none cursor-default"
+                          id="airplane-mode"
+                          onCheckedChange={(checked: boolean) =>
+                            field.onChange(checked)
+                          }
+                        >
+                          <Switch.Thumb className="block w-[21px] h-[21px] bg-green-500 rounded-full shadow-[0_2px_2px] shadow-blackA4 transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:bg-white data-[state=checked]:translate-x-[19px]" />
+                        </Switch.Root>
+                      )}
+                    />
+                  </div>
+                  <span className="text-red-600">
+                    Obs: Ao deixar marcado e salvar, o seu currículum deixará de
+                    ser um rascunho
+                  </span>
+                </fieldset>
               </form>
             </div>
             {dataResume && (
@@ -332,6 +373,101 @@ export default function CurriculumAdd() {
               </div>
             )}
           </div>
+          {dataEducation.length > 0 && (
+            <>
+              <p className="text-2xl">Dados Educacionais</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataEducation.map((education) => (
+                  <TopicItem
+                    key={education.course}
+                    titleCollapse="Educação"
+                    contentCollapse={education.course}
+                    type="education"
+                    education={education}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+          {dataExperience.length > 0 && (
+            <>
+              <p className="text-2xl">Dados Profissionais</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataExperience.map((experience) => (
+                  <TopicItem
+                    key={experience.company}
+                    titleCollapse="Experiência"
+                    contentCollapse={experience.company}
+                    type="experience"
+                    experience={experience}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {dataLinks.length > 0 && (
+            <>
+              <p className="text-2xl">Links</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataLinks.map((link) => (
+                  <TopicItem
+                    type="links"
+                    key={link.name}
+                    link={link}
+                    titleCollapse={link.name}
+                    contentCollapse={link.url}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {dataSkills.length > 0 && (
+            <>
+              <p className="text-2xl">Skills</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataSkills.map((skill) => (
+                  <TopicItem
+                    type="skills"
+                    key={skill}
+                    skill={skill}
+                    titleCollapse="Skill"
+                    contentCollapse={skill}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {dataCustom.length > 0 && (
+            <>
+              <p className="text-2xl">Outros</p>
+              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
+                {dataCustom.map((custom) => (
+                  <TopicItem
+                    type="custom"
+                    key={custom.title}
+                    custom={custom}
+                    titleCollapse={custom.title}
+                    contentCollapse={custom.description}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          <div className="w-full flex flex-col md:flex-row items-center gap-4 md:justify-between">
+            <ModalSaveCurriculum
+              handleSubmit={handleSubmit(handleCreateCurriculum)}
+              isSubmitting={isSubmitting}
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <ModalAddTopic isPulse />
+            <ModalPublishCurriculum
+              isPublished={isPublished}
+              setIsPublished={setIsPublished}
           {dataEducation.length > 0 && (
             <>
               <p className="text-2xl">Dados Educacionais</p>

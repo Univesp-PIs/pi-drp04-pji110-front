@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { ButtonBack } from '@/components/Buttons/back'
@@ -6,18 +7,36 @@ import { ItemCV } from './components/itemCV'
 import { ModalSearch } from '@/components/Modals/search'
 import { useListCurriculums } from '@/hooks/curriculum/listCurriculums'
 import { SkeletonDashboard } from '@/components/Skeletons/dashboard'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/contexts/AuthContex'
 import { RiLogoutCircleLine } from 'react-icons/ri'
 
 export default function Dashboard() {
   const { isAuthenticated, user, signOut } = useContext(AuthContext)
+  const [modalSearch, setModalSearch] = useState(false)
+  const [search, setSearch] = useState('')
+  const [cvs, setCvs] = useState([])
 
   const {
     data: dataListCurriculums,
     isLoading: isLoadingListCurriculums,
     error: errorListCurriculums,
   } = useListCurriculums(isAuthenticated ? String(user?.user_id) : '0')
+
+  console.log(cvs)
+
+  useEffect(() => {
+    if (search === '') {
+      const cvs = dataListCurriculums ? dataListCurriculums.cvs : []
+      setCvs(cvs as any)
+    } else {
+      setCvs(
+        dataListCurriculums?.cvs.filter((curriculum) =>
+          curriculum.title.toLowerCase().includes(search.toLowerCase()),
+        ) as any,
+      )
+    }
+  }, [search, dataListCurriculums])
 
   return (
     <>
@@ -64,15 +83,15 @@ export default function Dashboard() {
 
               <div className="w-full text-center">
                 <div className="w-full flex flex-col gap-4">
-                  {dataListCurriculums?.cvs.length === 0 && (
+                  {cvs.length === 0 && (
                     <div className="flex gap-4 items-center">
                       <div className="border rounded-md p-4 w-full text-center">
                         Nenhum CV público cadastrado
                       </div>
                     </div>
                   )}
-                  {dataListCurriculums?.cvs.map((curriculum) => (
-                    <ItemCV data={curriculum} key={curriculum.id} />
+                  {cvs.map((curriculum, index) => (
+                    <ItemCV data={curriculum} key={index} />
                   ))}
                   {errorListCurriculums && (
                     <div className="flex border justify-center items-center min-h-96">
@@ -111,7 +130,12 @@ export default function Dashboard() {
                 >
                   Sobre
                 </Link>
-                <ModalSearch />
+                <ModalSearch
+                  search={search}
+                  setSearch={setSearch}
+                  modalSearch={modalSearch}
+                  setModalSearch={setModalSearch}
+                />
               </div>
             </div>
           </div>

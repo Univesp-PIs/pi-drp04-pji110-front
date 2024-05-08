@@ -76,8 +76,6 @@ export default function Login() {
     if (fnSignIn) {
       router.push('/dashboard')
     }
-
-    toast.success('Login efetuado')
   }
 
   return (
@@ -94,20 +92,21 @@ export default function Login() {
               Continuar sem cadastro
             </Link>
           </div>
-          <h3 className="text-center md:text-left w-full">Opções de login</h3>
+          <h3 className="text-center md:text-left w-full text-xl">
+            Faça seu login
+          </h3>
           <form
             onSubmit={handleSubmit(handleLogin)}
             className="border rounded-md p-4 w-full text-center"
           >
             <div className="w-full flex flex-col gap-4">
               <label htmlFor="login" className="text-left">
-                Usuário
+                Email
               </label>
               <input
-                placeholder="Digite seu usuário ou e-mail"
+                placeholder="Digite seu e-mail"
                 id="login"
                 {...register('email')}
-                type="text"
                 className="border rounded-md p-4 w-full bg-transparent"
               />
               {errors.email && (
