@@ -1,14 +1,24 @@
-'use client'
-
 import * as Dialog from '@radix-ui/react-dialog'
 import { FaPlus, FaX } from 'react-icons/fa6'
+import { LinksForm } from '../Forms/links'
+import { ResumeForm } from '../Forms/resume'
+import { ExperienceForm } from '../Forms/experience'
+import { EducationForm } from '../Forms/education'
+import { SkillsForm } from '../Forms/skills'
+import { CustomForm } from '../Forms/custom'
 
-export function ModalAddTopic() {
+interface ModalAddTopicProps {
+  isPulse?: boolean
+}
+
+export function ModalAddTopic({ isPulse = false }: ModalAddTopicProps) {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <div className="p-2 border rounded-full cursor-pointer hover:scale-95 duration-200">
-          <FaPlus className="" size={20} />
+        <div
+          className={`p-2 border rounded-full cursor-pointer hover:scale-95 duration-200 ${isPulse && 'animate-bounce'}`}
+        >
+          <FaPlus size={isPulse ? 30 : 20} />
         </div>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -21,24 +31,12 @@ export function ModalAddTopic() {
             Selecione o tipo de tópico que deseja adicionar
           </Dialog.Description>
           <div className="w-full flex flex-col gap-4">
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Links
-            </button>
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Resumo
-            </button>
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Experiência
-            </button>
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Graduação
-            </button>
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Skills
-            </button>
-            <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-              Novo (+)
-            </button>
+            <LinksForm />
+            <ResumeForm />
+            <ExperienceForm />
+            <EducationForm />
+            <SkillsForm />
+            <CustomForm />
           </div>
 
           <Dialog.Close asChild>

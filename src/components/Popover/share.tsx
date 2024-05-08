@@ -1,9 +1,17 @@
 'use client'
 
+import { AuthContext } from '@/contexts/AuthContex'
 import * as Popover from '@radix-ui/react-popover'
 import Link from 'next/link'
+import { useContext } from 'react'
 import { FaChevronDown, FaX } from 'react-icons/fa6'
-export function PopoverShare() {
+
+interface IPopoverShare {
+  id: string
+  isMy?: boolean
+}
+export function PopoverShare({ id, isMy = false }: IPopoverShare) {
+  const { user } = useContext(AuthContext)
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
@@ -24,17 +32,21 @@ export function PopoverShare() {
               Menu de ações
             </p>
             <Link
-              href=""
+              href={`/curriculum/${id}`}
+              // href={`/curriculum/${id}`}
               className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
             >
               Visualizar
             </Link>
-            <Link
-              href=""
-              className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
-            >
-              Editar
-            </Link>
+            {isMy && (
+              <Link
+                // href={`/curriculum/editar/${id}`}
+                href={`/curriculum/editar/${user?.user_id}`}
+                className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
+              >
+                Editar
+              </Link>
+            )}
             <Link
               href=""
               className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
