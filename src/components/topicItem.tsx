@@ -1,31 +1,34 @@
 import { Collapse } from '@/components/Collapses/collapse'
 import { ModalAddTopic } from '@/components/Modals/addTopic'
 import { ModalDeletTopic } from '@/components/Modals/deleteTopic'
+import { ModalEditTopic } from './Modals/editTopic'
 
 interface TopicItemProps {
-  titleCollapse: string
-  contentCollapse: string
+  titleCollapse?: string
+  contentCollapse?: string
   link?: {
-    name: string
-    url: string
+    name?: string
+    url?: string
   }
   experience?: {
-    company: string
-    position: string
-    period: string
-    description: string
+    company?: string
+    position?: string
+    period?: string
+    description?: string
   }
   education?: {
-    institution: string
-    course: string
-    period: string
-    description: string
+    institution?: string
+    course?: string
+    period?: string
+    description?: string
   }
-  skill?: string
+  skill?: {
+    name?: string
+  }
   custom?: {
-    title: string
-    description: string
-    topicType: {
+    title?: string
+    description?: string
+    topicType?: {
       type: 'graphic' | 'topics'
       description?: string
       percentage?: number
@@ -41,6 +44,7 @@ interface TopicItemProps {
     | 'skills'
     | 'links'
     | 'resume'
+  isEdit?: boolean
 }
 
 export function TopicItem({
@@ -52,9 +56,10 @@ export function TopicItem({
   education,
   skill,
   custom,
+  isEdit = false,
 }: TopicItemProps) {
   return (
-    <div className="flex w-full gap-4">
+    <div className="flex w-full gap-4 flex-col md:flex-row justify-center items-center">
       <Collapse
         title={titleCollapse}
         content={contentCollapse}
@@ -75,6 +80,16 @@ export function TopicItem({
           custom={custom}
           type={type}
         />
+        {isEdit && (
+          <ModalEditTopic
+            link={link}
+            skill={skill}
+            education={education}
+            experience={experience}
+            custom={custom}
+            type={type}
+          />
+        )}
       </div>
     </div>
   )

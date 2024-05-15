@@ -22,7 +22,7 @@ export const useCreateUser = () => {
     onError: (error) => {
       const err = error as AxiosErrorWithMessage
 
-      toast.error(err.response?.data.message, {
+      toast.error(err.response?.data.error, {
         toastId: 'Error',
       })
     },

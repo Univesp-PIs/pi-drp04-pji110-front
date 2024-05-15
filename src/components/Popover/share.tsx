@@ -1,17 +1,26 @@
 'use client'
 
+import { ICurriculum } from '@/@types/curriculum'
 import { AuthContext } from '@/contexts/AuthContex'
 import * as Popover from '@radix-ui/react-popover'
 import Link from 'next/link'
 import { useContext } from 'react'
 import { FaChevronDown, FaX } from 'react-icons/fa6'
+import { ModalShareLink } from '../Modals/shareLink'
 
 interface IPopoverShare {
-  id: string
+  keyCurriculum: string
   isMy?: boolean
+  data: ICurriculum
 }
-export function PopoverShare({ id, isMy = false }: IPopoverShare) {
+export function PopoverShare({
+  keyCurriculum,
+  isMy = false,
+  data,
+}: IPopoverShare) {
   const { user } = useContext(AuthContext)
+
+  const idUser = user?.user_id ? user.user_id : 0
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
@@ -32,7 +41,7 @@ export function PopoverShare({ id, isMy = false }: IPopoverShare) {
               Menu de ações
             </p>
             <Link
-              href={`/curriculum/${id}`}
+              href={`/curriculum/${idUser}/${keyCurriculum}`}
               // href={`/curriculum/${id}`}
               className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
             >
@@ -40,19 +49,18 @@ export function PopoverShare({ id, isMy = false }: IPopoverShare) {
             </Link>
             {isMy && (
               <Link
-                // href={`/curriculum/editar/${id}`}
-                href={`/curriculum/editar/${user?.user_id}`}
+                href={`/curriculum/editar/${idUser}/${keyCurriculum}`}
                 className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
               >
                 Editar
               </Link>
             )}
-            <Link
-              href=""
-              className="px-6 py-2 rounded-md border border-primary text-center text-primary font-semibold hover:bg-primary hover:text-secondary duration-300"
-            >
-              Compartilhar
-            </Link>
+            <ModalShareLink
+              configDataProps={{
+                title: data.name + ' - Curriculum42 -',
+                link: `https://curriculum42-univesp-pi.vercel.app/curriculum/0/${data.key}`,
+              }}
+            />
           </div>
           <Popover.Close
             className="rounded-full h-[25px] w-[25px] inline-flex items-center justify-center text-primary absolute top-[5px] right-[5px] hover:bg-primary hover:text-secondary duration-300 cursor-pointer"

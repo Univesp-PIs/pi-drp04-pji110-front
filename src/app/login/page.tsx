@@ -55,11 +55,7 @@ export default function Login() {
     setIsSubmitting(true)
 
     if (recaptchaValue === null) {
-      toast.error('Preencha o re-captcha.', {
-        className: 'bg-primary',
-        bodyClassName: 'text-primary',
-        progressClassName: 'fancy-progress-bar',
-      })
+      toast.error('Preencha o re-captcha.')
       setIsSubmitting(false)
       return
     }

@@ -7,7 +7,7 @@ interface IItemCV {
 }
 
 export function ItemCV({ data, isMy }: IItemCV) {
-  const { name, title, id } = data
+  const { name, title, key } = data
 
   return (
     <div className="flex gap-4 items-center">
@@ -16,7 +16,7 @@ export function ItemCV({ data, isMy }: IItemCV) {
         <div className="w-1/2 text-right">{title}</div>
       </div>
 
-      <PopoverShare id={id} isMy={isMy} />
+      <PopoverShare keyCurriculum={key} isMy={isMy} data={data} />
     </div>
   )
 }

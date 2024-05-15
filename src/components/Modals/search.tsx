@@ -1,6 +1,10 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { FaX } from 'react-icons/fa6'
+import { FaKey, FaX } from 'react-icons/fa6'
 import { BsSearch } from 'react-icons/bs'
+import { TbAbc } from 'react-icons/tb'
+import { useRouter } from 'next/navigation'
+import { useContext, useState } from 'react'
+import { AuthContext } from '@/contexts/AuthContex'
 
 interface ModalSearchProps {
   setSearch: (search: string) => void
@@ -15,6 +19,17 @@ export function ModalSearch({
   modalSearch,
   setModalSearch,
 }: ModalSearchProps) {
+  const router = useRouter()
+
+  const [keyValue, setKeyValue] = useState('')
+  const { user } = useContext(AuthContext)
+
+  const idUser = user?.user_id ? user?.user_id : 0
+
+  function handleSearchByKey() {
+    router.push(`/curriculum/${idUser}/${keyValue}`)
+  }
+
   return (
     <Dialog.Root open={modalSearch} onOpenChange={setModalSearch}>
       <Dialog.Trigger asChild>
@@ -28,25 +43,47 @@ export function ModalSearch({
           <Dialog.Title className="text-primary font-semibold text-xl">
             Buscar
           </Dialog.Title>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-2 items-center">
+              <fieldset className="flex flex-col w-full gap-2 relative">
+                <TbAbc className="text-black absolute left-2 top-3" size={24} />
+                <input
+                  className="border pl-8 border-primary rounded-md p-3 w-full bg-transparent text-primary"
+                  id="search"
+                  defaultValue={search}
+                  onChange={(e) => setSearch(e.currentTarget.value)}
+                  placeholder="Pesquise por nome..."
+                />
+              </fieldset>
 
-          <div className="flex gap-2 items-center">
-            <fieldset className="flex flex-col w-full gap-2">
-              <input
-                className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
-                id="search"
-                defaultValue={search}
-                onChange={(e) => setSearch(e.currentTarget.value)}
-                placeholder="Pesquise algo..."
-              />
-            </fieldset>
+              <button
+                onClick={() => setModalSearch(false)}
+                className="border bg-primary text-secondary text-center p-4 font-medium rounded-md hover:scale-95 duration-300"
+              >
+                <BsSearch size={20} />
+              </button>
+            </div>
+            <div className="flex gap-2 items-center">
+              <fieldset className="flex flex-col w-full gap-2 relative">
+                <FaKey className="text-black absolute left-2 top-4" size={20} />
+                <input
+                  className="border pl-8 border-primary rounded-md p-3 w-full bg-transparent text-primary"
+                  id="key"
+                  defaultValue={keyValue}
+                  onChange={(e) => setKeyValue(e.currentTarget.value)}
+                  placeholder="Pesquisar pela key..."
+                />
+              </fieldset>
 
-            <button
-              onClick={() => setModalSearch(false)}
-              className="border bg-primary text-secondary text-center p-4 font-medium rounded-md hover:scale-95 duration-300"
-            >
-              <BsSearch size={20} />
-            </button>
+              <button
+                onClick={handleSearchByKey}
+                className="border bg-primary text-secondary text-center p-4 font-medium rounded-md hover:scale-95 duration-300"
+              >
+                <BsSearch size={20} />
+              </button>
+            </div>
           </div>
+
           <Dialog.Close asChild>
             <button
               className="text-primary p-2 hover:bg-primary hover:text-secondary focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none duration-100"
