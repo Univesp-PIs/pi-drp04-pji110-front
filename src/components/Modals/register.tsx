@@ -17,7 +17,7 @@ const schema = z
     name: z.string({ required_error: 'Nome obrigatório' }).refine(
       (value) => {
         const names = value.split(' ')
-        return names.length === 2 && names.every((name) => name.length > 0)
+        return names.length >= 2 && names.every((name) => name.length > 0)
       },
       {
         message: 'Por favor, insira o nome e sobrenome.',

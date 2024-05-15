@@ -55,12 +55,10 @@ export function setupAPIClient(ctx: Context = undefined) {
           })
         } else {
           axios.defaults.headers.common.Authorization = false
-          destroyCookie(undefined, 'nextauth.token')
-          destroyCookie(undefined, 'nextauth.refreshToken')
+          destroyCookie(undefined, 'curriculum42.token')
           // deslogar o usuário
           if (process.browser) {
-            destroyCookie(undefined, 'nextauth.token')
-            destroyCookie(undefined, 'nextauth.refreshToken')
+            destroyCookie(undefined, 'curriculum42.token')
           } else {
             return Promise.reject(new AuthTokenError())
           }

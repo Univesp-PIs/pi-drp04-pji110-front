@@ -57,9 +57,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authChannel.onmessage = (message) => {
       switch (message.data) {
         case 'signOut':
-          router.push('/')
+          router.push('/dashboard')
+          // window.location.reload()
+          authChannel.close()
           break
         default:
+          authChannel.close()
           break
       }
     }
@@ -87,14 +90,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
       })
 
-      const {
-        user_id,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        user_email,
-        expiry_timestamp,
-        user_name,
-        token,
-      } = response.data.payload
+      const { user_id, user_email, expiry_timestamp, user_name, token } =
+        response.data.payload
 
       setCookie(
         undefined,
@@ -139,7 +136,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authChannel.postMessage('signOut')
     setUser(undefined)
 
-    router.push('/')
+    router.push('/dashboard')
   }
   return (
     <AuthContext.Provider

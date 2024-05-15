@@ -2,10 +2,13 @@
 
 import { Collapse } from '@/components/Collapses/collapse'
 import { collapseData } from '@/components/Collapses/data'
+import { AuthContext } from '@/contexts/AuthContex'
 import Link from 'next/link'
+import { useContext } from 'react'
 import Typewriter from 'typewriter-effect'
 
 export default function Home() {
+  const { isAuthenticated } = useContext(AuthContext)
   return (
     <main className="w-full">
       <div className="w-full flex justify-center py-16" id="quem-somos">
@@ -29,10 +32,10 @@ export default function Home() {
           </h2>
           <div className="w-full flex justify-end">
             <Link
-              href="/login"
-              className="border py-2 px-8 rounded-md hover:bg-secondary hover:text-primary duration-300"
+              href={isAuthenticated ? '/dashboard' : '/login'}
+              className={`${isAuthenticated ? 'bg-green-600' : 'border'}  py-2 px-8 rounded-md hover:bg-secondary hover:text-primary duration-300`}
             >
-              Login
+              {isAuthenticated ? 'Dashboard' : 'Login'}
             </Link>
           </div>
           <div className="border rounded-md p-4 w-full text-center">
@@ -43,6 +46,7 @@ export default function Home() {
               {collapseData.map((item) => (
                 <Collapse
                   key={item.id}
+                  type="default"
                   title={item.title}
                   content={item.content}
                 />

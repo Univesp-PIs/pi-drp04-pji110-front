@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { ButtonBack } from '@/components/Buttons/back'
@@ -6,7 +7,6 @@ import * as Avatar from '@radix-ui/react-avatar'
 import * as Switch from '@radix-ui/react-switch'
 import { formatRoute } from '@/utils/formatRoute'
 import { ModalSaveCurriculum } from '@/components/Modals/save'
-import { ModalPublishCurriculum } from '@/components/Modals/publish'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/contexts/AuthContex'
 import { Controller, useForm } from 'react-hook-form'
@@ -17,6 +17,9 @@ import { InputCurriculum } from '@/components/Inputs/inputCurriculum'
 import { CreateCurriculumContext } from '@/contexts/CreateCurriculumContext'
 import { ModalAddTopic } from '@/components/Modals/addTopic'
 import { TopicItem } from '@/components/topicItem'
+import { ModalDeletTopic } from '@/components/Modals/deleteTopic'
+import { RiLogoutCircleLine } from 'react-icons/ri'
+import { ModalAccessLevelCurriculum } from '@/components/Modals/publish'
 
 const schema = z.object({
   user: z.object({
@@ -27,7 +30,7 @@ const schema = z.object({
       .refine(
         (value) => {
           const names = value.split(' ')
-          return names.length === 2 && names.every((name) => name.length > 0)
+          return names.length >= 2 && names.every((name) => name.length > 0)
         },
         {
           message: 'Por favor, insira o nome e sobrenome.',
@@ -62,58 +65,14 @@ const schema = z.object({
     published: z.boolean(),
     access_level: z.string().optional(),
   }),
-  links: z
-    .array(
-      z.object({
-        name: z.string(),
-        url: z.string(),
-      }),
-    )
-    .optional(),
-  experience: z
-    .array(
-      z.object({
-        company: z.string(),
-        position: z.string(),
-        period: z.string(),
-        description: z.string(),
-      }),
-    )
-    .optional(),
-  education: z
-    .array(
-      z.object({
-        institution: z.string(),
-        course: z.string(),
-        period: z.string(),
-        description: z.string(),
-      }),
-    )
-    .optional(),
-  skills: z.array(z.string()).optional(),
-  Custom: z
-    .array(
-      z.object({
-        title: z.string(),
-        description: z.string(),
-        topicType: z.object({
-          type: z.enum(['graphic', 'topics']),
-          description: z.string().optional(),
-          percentage: z.number().min(0).max(100).optional(),
-          color: z.string().optional(),
-          topics: z.array(z.string()).optional(),
-        }),
-      }),
-    )
-    .optional(),
 })
 
 type schemaCreateCurriculumProps = z.infer<typeof schema>
 
 export default function CurriculumAdd() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { user } = useContext(AuthContext)
-  const [isPublished, setIsPublished] = useState(false)
+  const { user, isAuthenticated, signOut } = useContext(AuthContext)
+  const [acessLevel, setAccessLevel] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const {
@@ -123,6 +82,7 @@ export default function CurriculumAdd() {
     dataResume,
     dataSkills,
     dataCustom,
+    resetValues,
   } = useContext(CreateCurriculumContext)
 
   const { mutateAsync } = useCreateCurriculum()
@@ -131,59 +91,50 @@ export default function CurriculumAdd() {
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     control,
-    setValue,
     formState: { errors },
   } = useForm<schemaCreateCurriculumProps>({
     resolver: zodResolver(schema),
     defaultValues: {
       user: {
-        name: fullName || '',
         published: false,
       },
     },
   })
 
   useEffect(() => {
+    resetValues()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     if (user?.user_name) {
-      reset({
-        user: {
-          name: fullName,
-        },
-      })
+      setValue('user.name', fullName)
     }
-  }, [reset, fullName, user?.user_name])
+  }, [fullName, user?.user_name, setValue])
 
   async function handleCreateCurriculum(data: schemaCreateCurriculumProps) {
     try {
       setIsSubmitting(true)
 
-      const AccessLevel = isPublished ? 'Public' : 'Private'
-
-      setValue('user.description', dataResume)
-      setValue('education', dataEducation)
-      setValue('experience', dataExperience)
-      setValue('links', dataLinks)
-      setValue('skills', dataSkills)
-      setValue('Custom', dataCustom)
-      setValue('user.access_level', AccessLevel)
-
       await mutateAsync({
         user: {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ...(data.user as any),
           id: user?.user_id as string,
+          description: dataResume,
+          access_level: acessLevel,
         },
-        links: data.links || [],
-        experience: data.experience || [],
-        education: data.education || [],
-        skills: data.skills || [],
-        Custom: data.Custom || [],
+        links: dataLinks || [],
+        experience: dataExperience || [],
+        education: dataEducation || [],
+        skills: dataSkills || [],
+        Custom: dataCustom || [],
       })
 
       setIsSubmitting(false)
-
+      resetValues()
       reset()
     } catch (error) {
       setIsSubmitting(false)
@@ -199,12 +150,18 @@ export default function CurriculumAdd() {
             <div>
               <ButtonBack />
             </div>
+            {isAuthenticated && (
+              <RiLogoutCircleLine
+                size={40}
+                className="test-white cursor-pointer"
+                onClick={signOut}
+              />
+            )}
             <div className="flex items-center gap-4">
               <span className="text-xl">ID</span>
               <span
                 className={`rounded-md border text-center px-4 py-2 hover:bg-secondary hover:text-primary duration-300`}
               >
-                {user?.user_id}
                 {user?.user_id}
               </span>
             </div>
@@ -214,7 +171,6 @@ export default function CurriculumAdd() {
             <h2 className="text-3xl font-bold">Criar Currículum</h2>
           </div>
 
-          <p className="text-2xl">Dados Pessoais</p>
           <p className="text-2xl">Dados Pessoais</p>
           <div
             className={`w-full flex flex-col gap-y-4 text-center items-center border rounded-md`}
@@ -365,10 +321,11 @@ export default function CurriculumAdd() {
             {dataResume && (
               <div className="w-full flex flex-col gap-4 p-8">
                 <p className="text-2xl">Resumo</p>
-                <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
-                  <div>
+                <div className="flex gap-3 items-center">
+                  <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
                     <p>{dataResume}</p>
                   </div>
+                  <ModalDeletTopic type="resume" />
                 </div>
               </div>
             )}
@@ -380,7 +337,7 @@ export default function CurriculumAdd() {
                 {dataEducation.map((education) => (
                   <TopicItem
                     key={education.course}
-                    titleCollapse="Educação"
+                    titleCollapse={education.institution}
                     contentCollapse={education.course}
                     type="education"
                     education={education}
@@ -396,7 +353,7 @@ export default function CurriculumAdd() {
                 {dataExperience.map((experience) => (
                   <TopicItem
                     key={experience.company}
-                    titleCollapse="Experiência"
+                    titleCollapse={experience.company}
                     contentCollapse={experience.company}
                     type="experience"
                     experience={experience}
@@ -430,10 +387,10 @@ export default function CurriculumAdd() {
                 {dataSkills.map((skill) => (
                   <TopicItem
                     type="skills"
-                    key={skill}
+                    key={skill.name}
                     skill={skill}
                     titleCollapse="Skill"
-                    contentCollapse={skill}
+                    contentCollapse={skill.name}
                   />
                 ))}
               </div>
@@ -465,104 +422,9 @@ export default function CurriculumAdd() {
               setIsModalOpen={setIsModalOpen}
             />
             <ModalAddTopic isPulse />
-            <ModalPublishCurriculum
-              isPublished={isPublished}
-              setIsPublished={setIsPublished}
-          {dataEducation.length > 0 && (
-            <>
-              <p className="text-2xl">Dados Educacionais</p>
-              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
-                {dataEducation.map((education) => (
-                  <TopicItem
-                    key={education.course}
-                    titleCollapse="Educação"
-                    contentCollapse={education.course}
-                    type="education"
-                    education={education}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-          {dataExperience.length > 0 && (
-            <>
-              <p className="text-2xl">Dados Profissionais</p>
-              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
-                {dataExperience.map((experience) => (
-                  <TopicItem
-                    key={experience.company}
-                    titleCollapse="Experiência"
-                    contentCollapse={experience.company}
-                    type="experience"
-                    experience={experience}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-
-          {dataLinks.length > 0 && (
-            <>
-              <p className="text-2xl">Links</p>
-              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
-                {dataLinks.map((link) => (
-                  <TopicItem
-                    type="links"
-                    key={link.name}
-                    link={link}
-                    titleCollapse={link.name}
-                    contentCollapse={link.url}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-
-          {dataSkills.length > 0 && (
-            <>
-              <p className="text-2xl">Skills</p>
-              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
-                {dataSkills.map((skill) => (
-                  <TopicItem
-                    type="skills"
-                    key={skill}
-                    skill={skill}
-                    titleCollapse="Skill"
-                    contentCollapse={skill}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-
-          {dataCustom.length > 0 && (
-            <>
-              <p className="text-2xl">Outros</p>
-              <div className="border rounded-md w-full flex items-center flex-col gap-4 p-8">
-                {dataCustom.map((custom) => (
-                  <TopicItem
-                    type="custom"
-                    key={custom.title}
-                    custom={custom}
-                    titleCollapse={custom.title}
-                    contentCollapse={custom.description}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-
-          <div className="w-full flex flex-col md:flex-row items-center gap-4 md:justify-between">
-            <ModalSaveCurriculum
-              handleSubmit={handleSubmit(handleCreateCurriculum)}
-              isSubmitting={isSubmitting}
-              isModalOpen={isModalOpen}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <ModalAddTopic isPulse />
-            <ModalPublishCurriculum
-              isPublished={isPublished}
-              setIsPublished={setIsPublished}
+            <ModalAccessLevelCurriculum
+              acessLevel={acessLevel}
+              setAccessLevel={setAccessLevel}
             />
           </div>
         </div>

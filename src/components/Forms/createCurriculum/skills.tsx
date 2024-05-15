@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 import { z } from 'zod'
 
 const schema = z.object({
-  skill: z.string().min(1, 'Campo obrigatório'),
+  name: z.string().min(1, 'Campo obrigatório'),
 })
 
 type schemaAddSkillsProps = z.infer<typeof schema>
@@ -28,7 +28,7 @@ export function SkillsForm() {
 
   function handleAddSkill(data: schemaAddSkillsProps) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setDataSkills((prev: any) => [...prev, data.skill])
+    setDataSkills((prev: any) => [...prev, data])
 
     toast.success('Skill adicionada com sucesso!')
     reset()
@@ -60,12 +60,12 @@ export function SkillsForm() {
               </label>
               <input
                 id="skill"
-                {...register('skill')}
+                {...register('name')}
                 className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
                 placeholder="Digite a skill"
               />
-              {errors.skill && (
-                <span className="text-red-500">{errors.skill.message}</span>
+              {errors.name && (
+                <span className="text-red-500">{errors.name?.message}</span>
               )}
             </fieldset>
 

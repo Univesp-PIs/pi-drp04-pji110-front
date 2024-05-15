@@ -1,11 +1,11 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { FaPlus, FaX } from 'react-icons/fa6'
-import { LinksForm } from '../Forms/links'
-import { ResumeForm } from '../Forms/resume'
-import { ExperienceForm } from '../Forms/experience'
-import { EducationForm } from '../Forms/education'
-import { SkillsForm } from '../Forms/skills'
-import { CustomForm } from '../Forms/custom'
+import { ResumeForm } from '../Forms/createCurriculum/resume'
+import { ExperienceForm } from '../Forms/createCurriculum/experience'
+import { EducationForm } from '../Forms/createCurriculum/education'
+import { SkillsForm } from '../Forms/createCurriculum/skills'
+import { CustomForm } from '../Forms/createCurriculum/custom'
+import { LinksForm } from '../Forms/createCurriculum/links'
 
 interface ModalAddTopicProps {
   isPulse?: boolean
@@ -31,10 +31,10 @@ export function ModalAddTopic({ isPulse = false }: ModalAddTopicProps) {
             Selecione o tipo de tópico que deseja adicionar
           </Dialog.Description>
           <div className="w-full flex flex-col gap-4">
-            <LinksForm />
             <ResumeForm />
-            <ExperienceForm />
             <EducationForm />
+            <ExperienceForm />
+            <LinksForm />
             <SkillsForm />
             <CustomForm />
           </div>
