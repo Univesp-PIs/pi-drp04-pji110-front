@@ -3,89 +3,119 @@
 import { CreateCurriculumContext } from '@/contexts/CreateCurriculumContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { FaX } from 'react-icons/fa6'
+import { FaPencil, FaX } from 'react-icons/fa6'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
 
 const schema = z.object({
-  company: z.string().min(1, 'Campo obrigatório'),
-  position: z.string().min(1, 'Campo obrigatório'),
+  institution: z.string().min(1, 'Campo obrigatório'),
+  course: z.string().min(1, 'Campo obrigatório'),
   period: z.string().min(1, 'Campo obrigatório'),
   description: z.string().min(1, 'Campo obrigatório'),
 })
 
-type schemaAddExperienceProps = z.infer<typeof schema>
+type schemaEditEducationProps = z.infer<typeof schema>
 
-export function ExperienceForm() {
-  const { setDataExperience } = useContext(CreateCurriculumContext)
+interface EditEducationFormProps {
+  education?: {
+    id?: number
+    institution?: string
+    course?: string
+    period?: string
+    description?: string
+  }
+}
+
+export function EditEducationForm({ education }: EditEducationFormProps) {
+  const { setDataEducation, dataEducation } = useContext(
+    CreateCurriculumContext,
+  )
   const {
     register,
     handleSubmit,
-    reset,
+    setValue,
     formState: { errors },
-  } = useForm<schemaAddExperienceProps>({
+  } = useForm<schemaEditEducationProps>({
     resolver: zodResolver(schema),
+    defaultValues: education,
   })
 
-  function handleAddExperience(data: schemaAddExperienceProps) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setDataExperience((prev: any) => [...prev, data])
-    toast.success('Experiência adicionada com sucesso!')
-    reset()
+  useEffect(() => {
+    if (education) {
+      setValue('institution', education.institution ?? '')
+      setValue('course', education.course ?? '')
+      setValue('period', education.period ?? '')
+      setValue('description', education.description ?? '')
+    }
+  }, [education, setValue])
+
+  function handleEditEducation(data: schemaEditEducationProps) {
+    const updatedEducation = dataEducation.map((item) => {
+      if (item.id === education?.id) {
+        return {
+          ...item,
+          ...data,
+        }
+      }
+      return item
+    })
+
+    setDataEducation(updatedEducation)
+
+    toast.success('Link editado com sucesso!')
   }
 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="p-4 border border-primary rounded-md w-full text-center bg-transparent text-primary hover:bg-primary hover:text-secondary duration-300">
-          Experiência
-        </button>
+        <div className="p-2 border rounded-full cursor-pointer hover:scale-95 duration-200">
+          <FaPencil size={20} />
+        </div>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-primaryA6 data-[state=open]:animate-overlayShow fixed inset-0" />
         <Dialog.Content className="overflow-y-auto flex flex-col gap-4 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-secondary p-4 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]">
           <Dialog.Title className="text-primary font-semibold text-xl text-center">
-            Criar experiência
+            Editar educação
           </Dialog.Title>
           <Dialog.Description className="text-primary text-center">
-            Preencha os campos abaixo para adicionar experiências ao seu
-            currículo
+            Preencha os campos abaixo para editar uma educação do seu currículo
           </Dialog.Description>
           <form
             className="w-full flex flex-col gap-4"
-            onSubmit={handleSubmit(handleAddExperience)}
+            onSubmit={handleSubmit(handleEditEducation)}
           >
             <fieldset className="flex flex-col w-full gap-2">
-              <label className="text-primary" htmlFor="company">
-                Empresa
+              <label className="text-primary" htmlFor="institution">
+                Instituição
               </label>
               <input
                 className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
-                id="company"
-                {...register('company')}
-                placeholder="Digite o nome da empresa, ex: Google"
+                id="institution"
+                {...register('institution')}
+                placeholder="Digite a instituição, ex: Universidade Federal de Sergipe"
               />
-              {errors.company && (
+              {errors.institution && (
                 <span className="text-red-500 text-sm">
-                  {errors.company.message}
+                  {errors.institution.message}
                 </span>
               )}
             </fieldset>
             <fieldset className="flex flex-col w-full gap-2">
-              <label className="text-primary" htmlFor="position">
-                Cargo
+              <label className="text-primary" htmlFor="course">
+                Curso
               </label>
               <input
                 className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
-                id="position"
-                {...register('position')}
-                placeholder="Digite o cargo, ex: Desenvolvedor Front-end"
+                id="course"
+                {...register('course')}
+                placeholder="Digite o curso, ex: Engenharia de Computação"
               />
-              {errors.position && (
+              {errors.course && (
                 <span className="text-red-500 text-sm">
-                  {errors.position.message}
+                  {errors.course.message}
                 </span>
               )}
             </fieldset>

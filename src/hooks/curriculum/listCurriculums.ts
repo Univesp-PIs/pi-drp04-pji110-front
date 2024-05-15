@@ -5,7 +5,7 @@ import { api } from '@/services/apiClient'
 import { useQuery } from '@tanstack/react-query'
 
 const fetchListCurriculums = async (id: string): Promise<ICurriculums> => {
-  const { data } = await api.get<ICurriculums>(`/curriculum/list/${id}`)
+  const { data } = await api.get<ICurriculums>(`/curriculum/list_key/${id}`)
 
   return data
 }

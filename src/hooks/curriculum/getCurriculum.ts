@@ -3,32 +3,25 @@ import { IGetCurriculum } from '@/@types/curriculum'
 import { api } from '@/services/apiClient'
 import { useQuery } from '@tanstack/react-query'
 
-<<<<<<< HEAD
-const fetchGetCurriculum = async (userID: string): Promise<IGetCurriculum> => {
-  const { data } = await api.get<IGetCurriculum>(
-    `/curriculum/profile/${userID}`,
-=======
 const fetchGetCurriculum = async (
-  curriculumId: string,
+  userID: string,
+  key: string,
 ): Promise<IGetCurriculum> => {
   const { data } = await api.get<IGetCurriculum>(
-    `/curriculum/profile/${curriculumId}`,
->>>>>>> 2584e4dded57bb7be574b90bbceeeafc35194246
+    `/curriculum/profile_key/${userID}`,
+    {
+      params: {
+        key,
+      },
+    },
   )
 
   return data
 }
 
-<<<<<<< HEAD
-export const useGetCurriculum = (userID: string) => {
+export const useGetCurriculum = (userID: string, key: string) => {
   return useQuery({
-    queryKey: ['get-curriculum', userID],
-    queryFn: () => fetchGetCurriculum(userID),
-=======
-export const useGetCurriculum = (curriculumId: string) => {
-  return useQuery({
-    queryKey: ['get-curriculum', curriculumId],
-    queryFn: () => fetchGetCurriculum(curriculumId),
->>>>>>> 2584e4dded57bb7be574b90bbceeeafc35194246
+    queryKey: ['get-curriculum', userID, key],
+    queryFn: () => fetchGetCurriculum(userID, key),
   })
 }

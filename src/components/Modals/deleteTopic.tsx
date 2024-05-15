@@ -8,22 +8,32 @@ import { toast } from 'react-toastify'
 
 interface ModalDeletTopicProps {
   link?: {
-    name: string
-    url: string
+    id?: number
+    status?: boolean
+    name?: string
+    url?: string
   }
   experience?: {
-    company: string
-    position: string
-    period: string
-    description: string
+    id?: number
+    status?: boolean
+    company?: string
+    position?: string
+    period?: string
+    description?: string
   }
   education?: {
-    institution: string
-    course: string
-    period: string
-    description: string
+    id?: number
+    status?: boolean
+    institution?: string
+    course?: string
+    period?: string
+    description?: string
   }
-  skill?: string
+  skill?: {
+    id?: number
+    name?: string
+    status?: boolean
+  }
   type?:
     | 'default'
     | 'custom'
@@ -34,9 +44,11 @@ interface ModalDeletTopicProps {
     | 'resume'
 
   custom?: {
-    title: string
-    description: string
-    topicType: {
+    id?: number
+    status?: boolean
+    title?: string
+    description?: string
+    topicType?: {
       type: 'graphic' | 'topics'
       description?: string
       percentage?: number
@@ -70,38 +82,160 @@ export function ModalDeletTopic({
 
   function handleDelete() {
     if (type === 'education') {
-      const newData = dataEducation.filter(
-        (item) =>
-          item.institution !== education?.institution &&
-          item.course !== education?.course &&
-          item.period !== education?.period,
-      )
-      setDataEducation(newData)
+      if (education?.id) {
+        const educationToUpdate = dataEducation.find(
+          (item) => item.id === education.id,
+        )
+
+        if (educationToUpdate) {
+          const updatedEducation = [...dataEducation]
+
+          const updatedEducationItem = {
+            id: educationToUpdate.id,
+            status: false,
+          }
+
+          const indexToUpdate = updatedEducation.findIndex(
+            (item) => item.id === education.id,
+          )
+
+          // 6. Substitua o objeto antigo pelo objeto atualizado no novo array
+          updatedEducation[indexToUpdate] = updatedEducationItem
+
+          // 7. Atualize o estado do contexto com o novo array
+          setDataEducation(updatedEducation)
+        }
+      } else {
+        const newData = dataEducation.filter(
+          (item) =>
+            item.institution !== education?.institution &&
+            item.course !== education?.course &&
+            item.period !== education?.period,
+        )
+        setDataEducation(newData)
+      }
     } else if (type === 'experience') {
-      const newData = dataExperience.filter(
-        (item) =>
-          item.company !== experience?.company &&
-          item.position !== experience?.position &&
-          item.period !== experience?.period,
-      )
-      setDataExperience(newData)
+      if (experience?.id) {
+        const experienceToUpdate = dataExperience.find(
+          (item) => item.id === experience.id,
+        )
+
+        if (experienceToUpdate) {
+          const updatedExperience = [...dataExperience]
+
+          const updatedExperienceItem = {
+            id: experienceToUpdate.id,
+            status: false,
+          }
+
+          const indexToUpdate = updatedExperience.findIndex(
+            (item) => item.id === experience.id,
+          )
+
+          // 6. Substitua o objeto antigo pelo objeto atualizado no novo array
+          updatedExperience[indexToUpdate] = updatedExperienceItem
+
+          // 7. Atualize o estado do contexto com o novo array
+          setDataExperience(updatedExperience)
+        }
+      } else {
+        const newData = dataExperience.filter(
+          (item) =>
+            item.company !== experience?.company &&
+            item.position !== experience?.position &&
+            item.period !== experience?.period,
+        )
+        setDataExperience(newData)
+      }
     } else if (type === 'links') {
-      const newData = dataLinks.filter(
-        (item) => item.name !== link?.name && item.url !== link?.url,
-      )
-      setDataLinks(newData)
+      if (link?.id) {
+        const linkToUpdate = dataLinks.find((item) => item.id === link.id)
+
+        if (linkToUpdate) {
+          const updatedLinks = [...dataLinks]
+
+          const updatedLinkItem = {
+            id: linkToUpdate.id,
+            status: false,
+          }
+
+          const indexToUpdate = updatedLinks.findIndex(
+            (item) => item.id === link.id,
+          )
+
+          // 6. Substitua o objeto antigo pelo objeto atualizado no novo array
+          updatedLinks[indexToUpdate] = updatedLinkItem
+
+          // 7. Atualize o estado do contexto com o novo array
+          setDataLinks(updatedLinks)
+        }
+      } else {
+        const newData = dataLinks.filter(
+          (item) => item.name !== link?.name && item.url !== link?.url,
+        )
+        setDataLinks(newData)
+      }
     } else if (type === 'resume') {
       setDataResume('')
     } else if (type === 'skills') {
-      const newData = dataSkills.filter((item) => item !== skill)
-      setDataSkills(newData)
+      if (skill?.id) {
+        const skillToUpdate = dataSkills.find((item) => item.id === skill.id)
+
+        if (skillToUpdate) {
+          const updatedSkills = [...dataSkills]
+
+          const updatedSkillItem = {
+            id: skillToUpdate.id,
+            status: false,
+          }
+
+          const indexToUpdate = updatedSkills.findIndex(
+            (item) => item.id === skill.id,
+          )
+
+          // 6. Substitua o objeto antigo pelo objeto atualizado no novo array
+          updatedSkills[indexToUpdate] = updatedSkillItem
+
+          // 7. Atualize o estado do contexto com o novo array
+          setDataSkills(updatedSkills)
+        }
+      } else {
+        const newData = dataSkills.filter((item) => item.name !== skill?.name)
+        setDataSkills(newData)
+      }
     } else if (type === 'custom') {
-      const newData = dataCustom.filter(
-        (item) =>
-          item.title !== custom?.title &&
-          item.description !== custom?.description,
-      )
-      setDataCustom(newData)
+      if (custom?.id) {
+        const customToUpdate = dataCustom.find((item) => item.id === custom.id)
+
+        if (customToUpdate) {
+          const updatedCustom = [...dataCustom]
+
+          const updatedCustomItem = {
+            id: customToUpdate.id,
+            status: false,
+            topicType: {
+              type: customToUpdate.topicType?.type as 'graphic' | 'topics',
+            },
+          }
+
+          const indexToUpdate = updatedCustom.findIndex(
+            (item) => item.id === custom.id,
+          )
+
+          // 6. Substitua o objeto antigo pelo objeto atualizado no novo array
+          updatedCustom[indexToUpdate] = updatedCustomItem
+
+          // 7. Atualize o estado do contexto com o novo array
+          setDataCustom(updatedCustom)
+        }
+      } else {
+        const newData = dataCustom.filter(
+          (item) =>
+            item.title !== custom?.title &&
+            item.description !== custom?.description,
+        )
+        setDataCustom(newData)
+      }
     }
 
     toast.success('Removido com sucesso!')

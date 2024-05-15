@@ -1,28 +1,35 @@
 export interface CollapseProps {
   id?: number
   title: string
-  content: string
+  content?: string
   link?: {
-    name: string
-    url: string
+    id?: number
+    name?: string
+    url?: string
   }
   experience?: {
-    company: string
-    position: string
-    period: string
-    description: string
+    id?: number
+    company?: string
+    position?: string
+    period?: string
+    description?: string
   }
   education?: {
-    institution: string
-    course: string
-    period: string
-    description: string
+    id?: number
+    institution?: string
+    course?: string
+    period?: string
+    description?: string
   }
-  skill?: string
+  skill?: {
+    id?: number
+    name?: string
+  }
   custom?: {
-    title: string
-    description: string
-    topicType: {
+    id?: number
+    title?: string
+    description?: string
+    topicType?: {
       type: 'graphic' | 'topics'
       description?: string
       percentage?: number

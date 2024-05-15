@@ -169,7 +169,8 @@ export function CustomForm() {
                     Cor
                   </label>
                   <input
-                    className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
+                    className="border h-20 border-primary rounded-md p-3 w-full bg-transparent text-primary"
+                    type="color"
                     id="topicType.color"
                     {...register('topicType.color')}
                   />

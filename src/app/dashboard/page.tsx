@@ -23,8 +23,6 @@ export default function Dashboard() {
     error: errorListCurriculums,
   } = useListCurriculums(isAuthenticated ? String(user?.user_id) : '0')
 
-  console.log(cvs)
-
   useEffect(() => {
     if (search === '') {
       const cvs = dataListCurriculums ? dataListCurriculums.cvs : []
@@ -32,7 +30,7 @@ export default function Dashboard() {
     } else {
       setCvs(
         dataListCurriculums?.cvs.filter((curriculum) =>
-          curriculum.title.toLowerCase().includes(search.toLowerCase()),
+          curriculum.name.toLowerCase().includes(search.toLowerCase()),
         ) as any,
       )
     }
@@ -106,7 +104,7 @@ export default function Dashboard() {
                   <div className="w-full flex flex-col gap-4">
                     <div className="flex gap-4 items-center">
                       <div className="border rounded-md p-4 w-2/3 md:w-1/2 text-center">
-                        Meu CV
+                        Meu CV(s)
                       </div>
                     </div>
                     {dataListCurriculums?.myCvs.length === 0 && (

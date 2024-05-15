@@ -8,7 +8,7 @@ export interface AxiosErrorWithMessage extends AxiosError {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     config: AxiosRequestConfig<any>
     data: {
-      message: string
+      error: string
     }
   }
 }
