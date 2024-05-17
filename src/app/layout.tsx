@@ -7,6 +7,7 @@ import { AuthProvider } from '../contexts/AuthContex'
 
 import ProviderQueryClient from '../contexts/QueriesContext'
 import { CreateCurriculumContextProvider } from '@/contexts/CreateCurriculumContext'
+import { NetworkStatusNotifier } from '@/utils/networkStatusNotifier'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={poppins.className}>
+        <NetworkStatusNotifier />
         <ToastContainer />
         <ProviderQueryClient>
           <AuthProvider>

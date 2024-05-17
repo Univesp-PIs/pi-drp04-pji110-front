@@ -29,8 +29,10 @@ export default function Dashboard() {
       setCvs(cvs as any)
     } else {
       setCvs(
-        dataListCurriculums?.cvs.filter((curriculum) =>
-          curriculum.name.toLowerCase().includes(search.toLowerCase()),
+        dataListCurriculums?.cvs.filter(
+          (curriculum) =>
+            curriculum.name.toLowerCase().includes(search.toLowerCase()) ||
+            curriculum.title.toLowerCase().includes(search.toLowerCase()),
         ) as any,
       )
     }

@@ -67,6 +67,7 @@ export function EditResumeForm() {
               <textarea
                 id="description"
                 {...register('description')}
+                rows={10}
                 className="border border-primary rounded-md p-3 w-full bg-transparent text-primary"
                 placeholder="Digite o resumo do seu currículo"
               />

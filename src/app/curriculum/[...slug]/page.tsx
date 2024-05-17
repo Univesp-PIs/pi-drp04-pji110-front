@@ -203,7 +203,7 @@ export default function CurriculumSlug({
               {dataGetCurriculum && dataGetCurriculum?.links.length > 0 && (
                 <>
                   <p className="text-2xl font-medium">Links</p>
-                  <div className="border rounded-md w-full flex items-center flex-col md:flex-row gap-4 p-3">
+                  <div className="border rounded-md w-full flex items-center flex-col md:flex-row gap-4 p-3 flex-wrap">
                     {dataGetCurriculum?.links.map((link) => (
                       <Link
                         key={link.url}
@@ -221,7 +221,7 @@ export default function CurriculumSlug({
               {dataGetCurriculum && dataGetCurriculum?.skills.length > 0 && (
                 <>
                   <p className="text-2xl font-medium">Skills</p>
-                  <ul className="border rounded-md w-full flex items-center flex-row gap-4 p-4">
+                  <ul className="border rounded-md w-full flex items-center flex-row gap-4 p-4 flex-wrap">
                     {dataGetCurriculum?.skills.map((skill) => (
                       <li
                         className="flex items-center cursor-pointer hover:scale-110 duration-300"
@@ -245,6 +245,12 @@ export default function CurriculumSlug({
                   />
                 ))}
               <div className="w-full flex justify-between">
+                <Link
+                  className="w-1/3 md:w-1/4 border p-4 rounded-md text-center hover:bg-secondary hover:text-primary duration-300"
+                  href="/dashboard"
+                >
+                  Dashboard
+                </Link>
                 <Link
                   className="w-1/3 md:w-1/4 border p-4 rounded-md text-center hover:bg-secondary hover:text-primary duration-300"
                   href="/"

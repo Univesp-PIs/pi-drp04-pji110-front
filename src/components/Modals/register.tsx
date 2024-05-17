@@ -93,7 +93,12 @@ export function ModalRegister() {
   }
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger asChild>
+      <Dialog.Trigger
+        asChild
+        onClick={() =>
+          setTimeout(() => (document.body.style.pointerEvents = ''), 0)
+        }
+      >
         <button className="border text-center py-2 px-8 md:w-1/3 font-medium rounded-md bg-secondary text-primary hover:bg-primary hover:text-secondary duration-300">
           Cadastrar
         </button>
