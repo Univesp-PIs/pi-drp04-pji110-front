@@ -20,6 +20,7 @@ import { TopicItem } from '@/components/topicItem'
 import { ModalDeletTopic } from '@/components/Modals/deleteTopic'
 import { RiLogoutCircleLine } from 'react-icons/ri'
 import { ModalAccessLevelCurriculum } from '@/components/Modals/publish'
+import { useHookFormMask } from 'use-mask-input'
 
 const schema = z.object({
   user: z.object({
@@ -103,6 +104,8 @@ export default function CurriculumAdd() {
       },
     },
   })
+
+  const registerWithMask = useHookFormMask(register)
 
   useEffect(() => {
     resetValues()
@@ -250,7 +253,7 @@ export default function CurriculumAdd() {
                     id="cellphone"
                     type="tel"
                     placeholder="Digite seu celular"
-                    {...register('user.phone')}
+                    {...registerWithMask('user.phone', ['(99) [9]9999-9999'])}
                   />
 
                   {errors.user?.phone && (

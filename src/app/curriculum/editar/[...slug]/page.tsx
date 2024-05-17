@@ -29,6 +29,7 @@ import { SkeletonCurriculum } from '@/components/Skeletons/curriculum'
 import { useRouter } from 'next/navigation'
 import { useUpdateCurriculum } from '@/hooks/curriculum/updateCurriculum'
 import { ModalDeleteCurriculum } from '@/components/Modals/delete'
+import { useHookFormMask } from 'use-mask-input'
 
 const schema = z.object({
   user: z.object({
@@ -125,6 +126,8 @@ export default function CurriculumEdit({
   } = useForm<schemaCreateCurriculumProps>({
     resolver: zodResolver(schema),
   })
+
+  const registerWithMask = useHookFormMask(register)
 
   useEffect(() => {
     if (!isLoading && !error && data) {
@@ -394,7 +397,9 @@ export default function CurriculumEdit({
                         id="cellphone"
                         type="tel"
                         placeholder="Digite seu celular"
-                        {...register('user.phone')}
+                        {...registerWithMask('user.phone', [
+                          '(99) [9]9999-9999',
+                        ])}
                       />
 
                       {errors.user?.phone && (
